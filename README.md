@@ -10,6 +10,8 @@ Or connect to RPC server, using as a super light wallet in a simple way.
 Use web browser to open, default port is 1337.  
 In public beta. Full instructions will be released later.  
 
+Supports multiple ETH type chains, including ETC, AVAX...  
+
 ## 中文
 這是一個連線／離線兩用的ETH錢包程式，完全開源。  
 你只需要安裝 node.js 與 web3 npm 套件就能讓他工作起來，只要執行 node oeww.js 即可。  
@@ -19,3 +21,5 @@ In public beta. Full instructions will be released later.
 
 使用瀏覽器開啟，預設 Port 為 1337。  
 公開測試中，完整說明會在稍晚釋出。
+
+支援多種ETH類型鏈，包括ETC、AVAX...
