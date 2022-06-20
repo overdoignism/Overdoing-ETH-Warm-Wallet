@@ -28,6 +28,6 @@ It's also an one page solution.
 
 支援多種ETH類型鏈，包括ETC、AVAX...
 
-註:如果你需要助記詞與私鑰產生器，  
-你可以拜訪這個專案: [BIP39 by iancoleman](https://github.com/iancoleman/bip39)  
+註：如果你需要助記詞與私鑰產生器，  
+你可以拜訪這個專案：[BIP39 by iancoleman](https://github.com/iancoleman/bip39)  
 這也是一個「一頁式」解決方案。
