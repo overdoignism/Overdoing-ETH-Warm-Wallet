@@ -31,3 +31,8 @@ It's also an one page solution.
 註：如果你需要助記詞與私鑰產生器，  
 你可以拜訪這個專案：[BIP39 by iancoleman](https://github.com/iancoleman/bip39)  
 這也是一個「一頁式」解決方案。
+
+## Declare
+ * [web3.js](https://github.com/ChainSafe/web3.js) is ChainSafe's project with LGPL V3 license 
+ * [QRCode.js](https://github.com/davidshimjs/qrcodejs) is davidshimjs's project with the MIT license 
+ * [jQuery](http://jquery.org/license/) is JS Foundation's project with the MIT license 
