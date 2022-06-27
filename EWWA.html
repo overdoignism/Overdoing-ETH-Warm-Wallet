@@ -37,7 +37,7 @@
 	}
 
 	async function Copy2Clipboard(what2copy){
-		var txt = document.getElementById(what2copy).value
+		var txt = document.getElementById(what2copy).innerHTML;
 		if (txt != ''){
 			await navigator.clipboard.writeText(txt);
 		}
@@ -348,17 +348,18 @@
 	<div id="blockAuto" class="good" style="border-top: 0px; display: none;">
 		<br />
 		Broadcast data <br />
-		<textarea id="Bdata" class="TxData">N/A</textarea><br /><br />
+		<textarea readonly id="Bdata" rows="4" cols="70" class="TxData">N/A</textarea><br /><br />
 		Broadcast RPC server<br />
 		<input readonly id="RPC_SRV" size="80" type="text" class="TxHash" style="width: 100%; box-sizing: border-box;"/><br /><br />
-		<input type="button" onclick="GoBroadcastAuto()" id="DoItbtnA" class="btn" value="&nbsp;Broadcast it&nbsp;" />
+		<input type="button" onclick="GoBroadcastAuto()" id="DoItbtnA" class="btn" style="font-size: 64px;" value="&nbsp;Broadcast it&nbsp;" />
 		<br /><br />
 
 		Broadcast result<br />
 		<div id="SIBR2" class="TxRes">N/A</div><br />
 
 		Transaction Hash (Use this to trace in chain explorer) <br />
-		<input readonly id="TH2" size="76" type="text" class="TxHash" value=""/> &nbsp; 
+		<textarea readonly id="TH2" rows="2" cols="70" class="TxData">N/A</textarea><br />
+		<br />
 		<input type="button" onclick="Copy2Clipboard('TH2')" id="Copy2clip" class="btn" value="&nbsp;Copy&nbsp;" />
 		<br />
 		<br />
