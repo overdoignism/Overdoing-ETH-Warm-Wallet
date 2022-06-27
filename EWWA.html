@@ -34,9 +34,13 @@
 				document.getElementById('blockAuto').style.display="";
 			}
 		}
+	}
 
-
-
+	async function Copy2Clipboard(what2copy){
+		var txt = document.getElementById(what2copy).value
+		if (txt != ''){
+			await navigator.clipboard.writeText(txt);
+		}
 	}
 
 	function ClearAll() {
@@ -185,7 +189,6 @@
 		}
 	}
 
-
 	async function getRevertReason(txHash) {
 		try {
 			const tx = await web3.eth.getTransaction(txHash);
@@ -239,15 +242,17 @@
 
 	</script>
 	<style>
-	body, button{font-family: serif; -webkit-font-smoothing: antialiased; font-smooth: always;}
+	body, button{font-family: serif; font-size:18px; -webkit-font-smoothing: antialiased; font-smooth: always;}
+	input,select,textarea{font-size:18px;}
+	.TitStr{font-size: 28px}
 	.btn{font-family: serif; font-size: 24px}
-	.good{border: 1px outset black; width:650px; height: auto; background-color:#eeeeff; padding: 0 15px 15px 15px; margin:0px auto;}
+	.good{border: 1px outset black; width:1000px; height: auto; background-color:#eeeeff; padding: 0 15px 15px 15px; margin:0px auto;}
 	.good1{border:1px rgb(255, 255, 255); height:auto; background-color:#e8daff; padding: 0 15px 15px 15px; margin:0px auto; line-height:1; font-family:sans-serif; font-size: 14px;}
 	.good2{border: 1px  rgb(255, 255, 255); height: auto; background-color:#bdd2f3; padding: 0 15px 25px 15px; margin:0px auto;}
-	.TxHash{background-color:#f7f1e6; border:solid 1px gray; font-family:sans-serif; background-color:#e6eff7; width: 100%; box-sizing: border-box;}
+	.TxHash{background-color:#f7f1e6; border:solid 1px gray; font-family:sans-serif; background-color:#e6eff7;}
 	.ReadOnlyInput{font-family:sans-serif; background-color:#e6eff7; border:solid 1px gray;}
-	.TxRes{font-family:sans-serif; font-size: 12px; background-color:#e6eff7; padding: 15px; border:solid 1px gray;}
-	.TxData{font-family:sans-serif; font-size: 12px; padding: 5px; border:solid 1px gray; background-color:#f7f1e6; width: 100%; resize: none;}
+	.TxRes{font-family:sans-serif; font-size: 18px; background-color:#e6eff7; padding: 15px; border:solid 1px gray;}
+	.TxData{font-family:sans-serif; font-size: 18px; padding: 5px; border:solid 1px gray; background-color:#f7f1e6; width: 100%; resize: none;}
 	</style>
   </head>
   
@@ -256,7 +261,7 @@
 	<br />
     <div id="title" class="good" style="border-bottom: 0px;">
 		<br />
-		<span style="font-size: 32px">ETH Warm Wallet assistant v0.2</span><br /><br />For handling the online part of the cold wallet. 
+		<span style="font-size: 32px">ETH Warm Wallet assistant v0.3</span><br /><br />For handling the online part of the cold wallet. 
 		Using <a href=https://github.com/ChainSafe/web3.js>web3.js</a> API. Detected ver: <span id='web3v'></span><br /><br />
 	
 		<div id="block1" class="good1">
@@ -277,7 +282,7 @@
 	<div id="main" class="good" style="border-top: 0px;">
 		<div id="block2" class="good2">
 			<br />
-			<span style="font-size: 26px">Initial</span><br /><br />
+			<span class="TitStr">Initial</span><br /><br />
 			Select cryptocurrency, network, and RPC server<br />
 			<select id="CC_TYPE" required="required">
 			<option selected="selected" value="ETH,1,https://rpc.ankr.com/eth">ETH: Ethereum Mainnet (Ankr)</option>
@@ -301,7 +306,7 @@
 		<br />
 		<div id="block3" class="good2">
 			<br />
-			<span style="font-size: 26px">Information</span> &nbsp; <input type="button" onclick="GetInfo()" class="btn" value="Retrieve" id="GetInfo"><br /><br />
+			<span class="TitStr">Information</span> &nbsp; <input type="button" onclick="GetInfo()" class="btn" value=" Retrieve " id="GetInfo"><br /><br />
 			Heightest block and access time<br />
 			<input readonly maxlength="30" id="WORK" size="55" type="text" class="ReadOnlyInput" /><br /><br />
 
@@ -322,8 +327,8 @@
 		<br />
 		<div id="block4" class="good2">
 			<br />
-			<span style="font-size: 26px">Broadcast</span>
-			&nbsp; <input type="button" onclick="GoBroadcast()" id="DoItbtn" class="btn" value="Do it" />
+			<span class="TitStr">Broadcast</span>
+			&nbsp; <input type="button" onclick="GoBroadcast()" id="DoItbtn" class="btn" value=" Do it " />
 			<br /><br />
 			Paste signed transaction data here for broadcast<br />
 			<input id="SIGTR" size="55" type="text" /><br /><br />
@@ -332,14 +337,15 @@
 			<div id="SIBR" class="TxRes">N/A</div><br />
 
 			Transaction Hash (Use this to trace in chain explorer) <br />
-			<input readonly id="TH" size="55" type="text" class="TxHash" /><br />
-
+			<input readonly id="TH" size="80" type="text" class="TxHash" /> &nbsp; 
+			<input type="button" onclick="Copy2Clipboard('TH')" id="Copy2clip" class="btn" value=" Copy " />
+			<br />
 		</div>
 		<br />
 		<div class="good2" style="text-align:center; padding: 20px 15px 20px 15px;">
-			<input type="button" onclick="ClearAll()" id="CLR" class="btn" value="Clear" />
+			<input type="button" onclick="ClearAll()" id="CLR" class="btn" value=" Clear " />
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<input type="button" onclick="window.close()" id="BYE" class="btn" value="Bye" />
+			<input type="button" onclick="window.close()" id="BYE" class="btn" value=" Bye " />
 		</div>
 
 	</div>
@@ -348,16 +354,19 @@
 		Broadcast data <br />
 		<textarea id="Bdata" class="TxData">N/A</textarea><br /><br />
 		Broadcast RPC server<br />
-		<input readonly id="RPC_SRV" size="55" type="text" class="TxHash" /><br /><br />
-		<input type="button" onclick="GoBroadcastAuto()" id="DoItbtnA" class="btn" value="Broadcast it" />
+		<input readonly id="RPC_SRV" size="80" type="text" class="TxHash" style="width: 100%; box-sizing: border-box;"/><br /><br />
+		<input type="button" onclick="GoBroadcastAuto()" id="DoItbtnA" class="btn" value=" Broadcast it " />
 		<br /><br />
 
 		Broadcast result<br />
 		<div id="SIBR2" class="TxRes">N/A</div><br />
 
 		Transaction Hash (Use this to trace in chain explorer) <br />
-		<input readonly id="TH2" size="55" type="text" class="TxHash" /><br />
-
+		<input readonly id="TH2" size="80" type="text" class="TxHash" value=""/> &nbsp; 
+		<input type="button" onclick="Copy2Clipboard('TH2')" id="Copy2clip" class="btn" value=" Copy " />
+		<br />
+		<br />
+		
 	</div>
   </body>
   
