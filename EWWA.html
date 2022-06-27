@@ -50,7 +50,7 @@
 		document.getElementById('GASP').value = '';
 		document.getElementById('BGASP').value = '';
 		document.getElementById('ADDR').value = '';
-		document.getElementById('TH').value = '';
+		document.getElementById('TH').innerHTML = '';
 		document.getElementById('SIGTR').value = '';
 		document.getElementById('SIBR').innerHTML = 'N/A';
 	}
@@ -114,7 +114,7 @@
 	async function GoBroadcast() {
 
 		document.getElementById('SIBR').value = '';
-		document.getElementById('TH').value = '';
+		document.getElementById('TH').innerHTML = '';
 
 		if (document.getElementById('SIGTR').value == '') {
 			alert('Signed transaction data is empty.');
@@ -146,7 +146,7 @@
 			};
 
 			document.getElementById('SIBR').innerHTML = TS_status;
-			document.getElementById('TH').value = getTransactionReceipt.transactionHash;
+			document.getElementById('TH').innerHTML = getTransactionReceipt.transactionHash;
 			document.getElementById('SIGTR').value = '';
 
 		} catch (exception) {
@@ -242,17 +242,17 @@
 
 	</script>
 	<style>
-	body, button{font-family: sans-serif; font-size: 18px;}
-	input, select, textarea, div{font-family: sans-serif; font-size: 16px;}
+	body, button{font-family: serif; font-size:18px; -webkit-font-smoothing: antialiased; font-smooth: always; float: left;}
+	input,select,textarea{font-size:18px;}
 	.TitStr{font-size: 28px}
-	.btn{font-family: sans-serif; font-size: 24px}
-	.good{border: 1px outset black; width:1000px; height: auto; background-color:#eeeeff; padding: 0 15px 15px 15px; margin:0px auto;}
-	.good1{border: 1px rgb(255, 255, 255); height:auto; background-color:#e8daff; padding: 0 15px 15px 15px; margin:0px auto; line-height:1; font-family:sans-serif; font-size: 14px;}
-	.good2{border: 1px  rgb(255, 255, 255); height: auto; background-color:#bdd2f3; padding: 0 15px 25px 15px; margin:0px auto;}
+	.btn{font-family: serif; font-size: 24px}
+	.good{border: 1px outset black; width:860px; height: auto; background-color:#eeeeff; padding: 0 15px 15px 15px; margin:0px auto; float: left;}
+	.good1{border:1px rgb(255, 255, 255); width:830px; height:auto; background-color:#e8daff; padding: 0 15px 15px 15px; margin:0px auto; line-height:1; font-family:sans-serif; font-size: 14px; float: left;}
+	.good2{border:1px rgb(255, 255, 255); width:830px; height:auto; background-color:#bdd2f3; padding: 0 15px 25px 15px; margin:0px auto; float: left;}
 	.TxHash{background-color:#f7f1e6; border:solid 1px gray; font-family:sans-serif; background-color:#e6eff7;}
 	.ReadOnlyInput{font-family:sans-serif; background-color:#e6eff7; border:solid 1px gray;}
-	.TxRes{font-family:sans-serif; font-size: 16px; background-color:#e6eff7; padding: 15px; border:solid 1px gray;}
-	.TxData{font-family:sans-serif; font-size: 16px; padding: 5px; border:solid 1px gray; background-color:#f7f1e6; width: 100%; resize: none;}
+	.TxRes{font-family:sans-serif; font-size: 18px; background-color:#e6eff7; padding: 15px; border:solid 1px gray;}
+	.TxData{font-family:sans-serif; font-size: 18px; padding: 5px; border:solid 1px gray; background-color:#e6eff7; resize: none;}
 	</style>
   </head>
   
@@ -266,23 +266,18 @@
 	
 		<div id="block1" class="good1">
 			<br />
+			<b>* Declare *</b><br /><br />
 			It's a part of <a href='https://github.com/overdoignism/Overdoing-ETH-Warm-Wallet'>Overdoing ETH Warm Wallet</a>. Using <a href="https://github.com/overdoignism/Overdoing-ETH-Warm-Wallet/blob/main/LICENSE">MIT license.</a><br /><br />
 			<span style="color: #900000">
 			&#9888; The author has no any responsibility at any conditions. Please refer to MIT license. &#9888;</span><br /><br />
-			Welcome any currency tip: 0x7cE987d1C417DBb86CfE6f9Ac6cfEDF7554853AF<br />
+			<span style="font-size: 14px;">Welcome any currency tip: 0x7cE987d1C417DBb86CfE6f9Ac6cfEDF7554853AF</span><br />
 		</div>
-
-		<!--<form method="GET" action="">
-		Dummy Username <br />
-		<input maxlength="69" name="uname" required="required" size="73" type="text" /><br /><br />
-
-		Private key <br />
-		<input maxlength="69" name="S_PKEY" required="required" size="73" type="password" /><br /><br />-->
 	</div>
+	<br /><br />
 	<div id="main" class="good" style="border-top: 0px;">
 		<div id="block2" class="good2">
 			<br />
-			<span style="font-size: 28px">Initial</span><br /><br />
+			<span class="TitStr">Initial</span><br /><br />
 			Select cryptocurrency, network, and RPC server<br />
 			<select id="CC_TYPE" required="required">
 			<option selected="selected" value="ETH,1,https://rpc.ankr.com/eth">ETH: Ethereum Mainnet (Ankr)</option>
@@ -303,10 +298,11 @@
 			Sender&#39;address (optional) <br />
 			<input maxlength="69" id="ADDR" required="required" size="55" type="text" /><br />
 		</div>
-		<br />
+		<br />&nbsp;<br />
 		<div id="block3" class="good2">
 			<br />
-			<span class="TitStr">Information</span> &nbsp; <input type="button" onclick="GetInfo()" class="btn" value=" Retrieve " id="GetInfo"><br /><br />
+			<span class="TitStr">Information</span> &nbsp; 
+			<input type="button" onclick="GetInfo()" class="btn" value="&nbsp;Retrieve&nbsp;" id="GetInfo"><br /><br />
 			Heightest block and access time<br />
 			<input readonly maxlength="30" id="WORK" size="55" type="text" class="ReadOnlyInput" /><br /><br />
 
@@ -324,28 +320,28 @@
 			<input readonly maxlength="30" id="BGASP" size="55" type="text" class="ReadOnlyInput" /><br />
 			
 		</div>
-		<br />
+		<br />&nbsp;<br />
 		<div id="block4" class="good2">
 			<br />
 			<span class="TitStr">Broadcast</span>
-			&nbsp; <input type="button" onclick="GoBroadcast()" id="DoItbtn" class="btn" value=" Do it " />
+			&nbsp; <input type="button" onclick="GoBroadcast()" id="DoItbtn" class="btn" value="&nbsp;Do it&nbsp;" />
 			<br /><br />
 			Paste signed transaction data here for broadcast<br />
-			<input id="SIGTR" size="55" type="text" /><br /><br />
+			<textarea name="SIGTR" id="SIGTR" rows="4" cols="70" class="TxData"></textarea><br /><br />
 
 			Broadcast result<br />
 			<div id="SIBR" class="TxRes">N/A</div><br />
 
 			Transaction Hash (Use this to trace in chain explorer) <br />
-			<input readonly id="TH" size="80" type="text" class="TxHash" /> &nbsp; 
-			<input type="button" onclick="Copy2Clipboard('TH')" id="Copy2clip" class="btn" value=" Copy " />
+			<textarea readonly name="TH" id="TH" rows="2" cols="70" class="TxData"></textarea> &nbsp;  
+			<input type="button" onclick="Copy2Clipboard('TH')" id="Copy2clip" class="btn" value="&nbsp;Copy&nbsp;" />
 			<br />
 		</div>
-		<br />
+		<br />&nbsp;<br />
 		<div class="good2" style="text-align:center; padding: 20px 15px 20px 15px;">
-			<input type="button" onclick="ClearAll()" id="CLR" class="btn" value=" Clear " />
+			<input type="button" onclick="ClearAll()" id="CLR" class="btn" value="&nbsp;Clear&nbsp;" />
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<input type="button" onclick="window.close()" id="BYE" class="btn" value=" Bye " />
+			<input type="button" onclick="window.close()" id="BYE" class="btn" value="&nbsp;Bye&nbsp;" />
 		</div>
 
 	</div>
@@ -355,17 +351,18 @@
 		<textarea id="Bdata" class="TxData">N/A</textarea><br /><br />
 		Broadcast RPC server<br />
 		<input readonly id="RPC_SRV" size="80" type="text" class="TxHash" style="width: 100%; box-sizing: border-box;"/><br /><br />
-		<input type="button" onclick="GoBroadcastAuto()" id="DoItbtnA" class="btn" value=" Broadcast it " />
+		<input type="button" onclick="GoBroadcastAuto()" id="DoItbtnA" class="btn" value="&nbsp;Broadcast it&nbsp;" />
 		<br /><br />
 
 		Broadcast result<br />
 		<div id="SIBR2" class="TxRes">N/A</div><br />
 
 		Transaction Hash (Use this to trace in chain explorer) <br />
-		<input readonly id="TH2" size="80" type="text" class="TxHash" value=""/> &nbsp; 
-		<input type="button" onclick="Copy2Clipboard('TH2')" id="Copy2clip" class="btn" value=" Copy " />
+		<input readonly id="TH2" size="76" type="text" class="TxHash" value=""/> &nbsp; 
+		<input type="button" onclick="Copy2Clipboard('TH2')" id="Copy2clip" class="btn" value="&nbsp;Copy&nbsp;" />
 		<br />
 		<br />
+		<input type="button" onclick="window.close()" id="BYE2" class="btn" value="&nbsp;Bye&nbsp;" />
 		
 	</div>
   </body>
