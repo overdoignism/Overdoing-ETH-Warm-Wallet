@@ -246,13 +246,15 @@
 	input,select,textarea{font-size:18px;}
 	.TitStr{font-size: 28px}
 	.btn{font-family: serif; font-size: 24px}
-	.good{border: 1px outset black; width:860px; height: auto; background-color:#eeeeff; padding: 0 15px 15px 15px; margin:0px auto; float: left;}
-	.good1{border:1px rgb(255, 255, 255); width:830px; height:auto; background-color:#e8daff; padding: 0 15px 15px 15px; margin:0px auto; line-height:1; font-family:sans-serif; font-size: 14px; float: left;}
-	.good2{border:1px rgb(255, 255, 255); width:830px; height:auto; background-color:#bdd2f3; padding: 0 15px 25px 15px; margin:0px auto; float: left;}
+	.good{border: 1px outset black; width:900px; height: auto; background-color:#eeeeff; padding: 0 15px 15px 15px; margin:0px auto; float: left;}
+	.good1{border:1px rgb(255, 255, 255); width:870px; height:auto; background-color:#e8daff; padding: 0 15px 15px 15px; margin:0px auto; line-height:1; font-family:sans-serif; font-size: 14px; float: left;}
+	.good2{border:1px rgb(255, 255, 255); width:870px; height:auto; background-color:#bdd2f3; padding: 0 15px 25px 15px; margin:0px auto; float: left;}
 	.TxHash{background-color:#f7f1e6; border:solid 1px gray; font-family:sans-serif; background-color:#e6eff7;}
 	.ReadOnlyInput{font-family:sans-serif; background-color:#e6eff7; border:solid 1px gray;}
 	.TxRes{font-family:sans-serif; font-size: 18px; background-color:#e6eff7; padding: 15px; border:solid 1px gray;}
 	.TxData{font-family:sans-serif; font-size: 18px; padding: 5px; border:solid 1px gray; background-color:#e6eff7; resize: none;}
+	.RPTxt{border: 0px outset black; width: auto; height: auto; background-color:#f7f1e6; padding: 15px 15px 15px 15px; margin:0px auto; color:#000000;
+		 display: flex; flex-direction: row; word-wrap: break-word; font-family:sans-serif;}
 	</style>
   </head>
   
@@ -261,7 +263,7 @@
 	<br />
     <div id="title" class="good" style="border-bottom: 0px;">
 		<br />
-		<span style="font-size: 32px">ETH Warm Wallet assistant v0.3</span><br /><br />For handling the online part of the cold wallet. 
+		<span style="font-size: 32px">ETH Warm Wallet assistant v0.4</span><br /><br />For handling the online part of the cold wallet. 
 		Using <a href=https://github.com/ChainSafe/web3.js>web3.js</a> API. Detected ver: <span id='web3v'></span><br /><br />
 	
 		<div id="block1" class="good1">
@@ -327,14 +329,22 @@
 			&nbsp; <input type="button" onclick="GoBroadcast()" id="DoItbtn" class="btn" value="&nbsp;Do it&nbsp;" />
 			<br /><br />
 			Paste signed transaction data here for broadcast<br />
-			<textarea name="SIGTR" id="SIGTR" rows="4" cols="70" class="TxData"></textarea><br /><br />
+			<textarea name="SIGTR" id="SIGTR" rows="4" cols="60" class="TxData"></textarea><br /><br />
 
 			Broadcast result<br />
 			<div id="SIBR" class="TxRes">N/A</div><br />
 
 			Transaction Hash (Use this to trace in chain explorer) <br />
-			<textarea readonly name="TH" id="TH" rows="2" cols="70" class="TxData"></textarea> &nbsp;  
-			<input type="button" onclick="Copy2Clipboard('TH')" id="Copy2clip" class="btn" value="&nbsp;Copy&nbsp;" />
+			<!--<textarea readonly name="TH" id="TH" rows="2" cols="60" class="TxData"></textarea> &nbsp;  
+			<input type="button" onclick="Copy2Clipboard('TH')" id="Copy2clip" class="btn" value="&nbsp;Copy&nbsp;" />-->
+
+			<div id="TX01" class="RPTxt">
+				<div id="TH" style="margin: 10px; width: 70%;"><br />N/A<br /></div>
+				<div id="COPYBT1" style="margin: 10px; width: 30%; display: flex; align-items: center;">
+					<input type="button" onclick="Copy2Clipboard('TH')" id="Copy2clipTX" class="btn" value="&nbsp;Copy&nbsp;" />
+				</div>
+			</div>
+
 			<br />
 		</div>
 		<br />&nbsp;<br />
@@ -348,23 +358,34 @@
 	<div id="blockAuto" class="good" style="border-top: 0px; display: none;">
 		<br />
 		Broadcast data <br />
-		<textarea readonly id="Bdata" rows="4" cols="70" class="TxData">N/A</textarea><br /><br />
-		Broadcast RPC server<br />
+
+		<div id="TX01" class="RPTxt">
+			<div id="Bdata" style="margin: 10px; width: 100%;">N/A</div>
+		</div>
+
+		<br />Broadcast RPC server<br />
 		<input readonly id="RPC_SRV" size="80" type="text" class="TxHash" style="width: 100%; box-sizing: border-box;"/><br /><br />
+		
+		<p style="text-align:center">
 		<input type="button" onclick="GoBroadcastAuto()" id="DoItbtnA" class="btn" style="font-size: 64px;" value="&nbsp;Broadcast it&nbsp;" />
-		<br /><br />
+		</p>
+		<br />
 
 		Broadcast result<br />
 		<div id="SIBR2" class="TxRes">N/A</div><br />
 
 		Transaction Hash (Use this to trace in chain explorer) <br />
-		<textarea readonly id="TH2" rows="2" cols="70" class="TxData">N/A</textarea><br />
+
+		<div id="TX02" class="RPTxt">
+			<div id="TH2" style="margin: 10px; width: 70%;">N/A</div>
+			<div id="COPYBT2" style="margin: 10px; width: 30%; display: flex; align-items: center;">
+				<input type="button" onclick="Copy2Clipboard('TH2')" id="Copy2clipTX2" class="btn" value="&nbsp;Copy&nbsp;" />
+			</div>
+		</div>
 		<br />
-		<input type="button" onclick="Copy2Clipboard('TH2')" id="Copy2clip" class="btn" value="&nbsp;Copy&nbsp;" />
-		<br />
-		<br />
+		<p style="text-align:center">
 		<input type="button" onclick="window.close()" id="BYE2" class="btn" value="&nbsp;Bye&nbsp;" />
-		
+		</p>
 	</div>
   </body>
   
