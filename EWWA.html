@@ -251,7 +251,8 @@
 		font-family:serif; font-size: 14px;}
 	.good2{border:1px rgb(255, 255, 255); width:870px; height:auto; background-color:#bdd2f3; padding: 0 15px 25px 15px; margin:0px auto;}
 	.TxHash{background-color:#f7f1e6; border:solid 1px gray; font-family:sans-serif; background-color:#e6eff7;}
-	.ReadOnlyInput{font-family:sans-serif; background-color:#e6eff7; border:solid 1px gray;}
+	.ReadOnlyInput{font-family:sans-serif; background-color:#e6eff7; border:solid 1px gray; width:650px;}
+	.InputTxt{font-family:sans-serif; background-color:#ffffff; border:solid 1px gray; width:650px;}
 	.TxRes{font-family:sans-serif; background-color:#e6eff7; padding: 15px; border:solid 1px gray;}
 	.TxData{font-family:sans-serif; font-size: 20px; padding: 5px; border:solid 1px gray; background-color:#e6eff7; resize: none;}
 	.RPTxt{border: 0px outset black; width: auto; height: auto; background-color:#f7f1e6; padding: 15px 15px 15px 15px; margin:0px auto; color:#000000;
@@ -264,7 +265,7 @@
 	<br />
     <div id="title" class="good" style="border-bottom: 0px;">
 		<br />
-		<span style="font-size: 32px">ETH Warm Wallet assistant v0.5</span><br /><br />For handling the online part of the cold wallet. 
+		<span style="font-size: 32px">ETH Warm Wallet assistant v0.6</span><br /><br />For handling the online part of the cold wallet. 
 		Using <a href=https://github.com/ChainSafe/web3.js>web3.js</a> API. Detected ver: <span id='web3v'></span><br /><br />
 		<div id="block1" class="good1" style="float: left;">
 				<br />
@@ -281,7 +282,7 @@
 			<br />
 			<span class="TitStr">Initial</span><br /><br />
 			Select cryptocurrency, network, and RPC server<br />
-			<select id="CC_TYPE" required="required">
+			<select id="CC_TYPE" class="InputTxt">
 			<option selected="selected" value="ETH,1,https://rpc.ankr.com/eth">ETH: Ethereum Mainnet (Ankr)</option>
 			<option value="ETH,1,https://cloudflare-eth.com">ETH: Ethereum Mainnet (Cloudflare)</option>
 			<option value="ETH,1,https://main-rpc.linkpool.io">ETH: Ethereum Mainnet (LinkPool)</option>
@@ -298,7 +299,7 @@
 			</select><br /><br />
 	
 			Sender&#39;address (optional) <br />
-			<input maxlength="69" id="ADDR" required="required" size="55" type="text" /><br />
+			<input maxlength="69" id="ADDR" required="required" type="text" style="width:650px;"/><br />
 		</div>
 		<br />
 		<div id="block3" class="good2">
@@ -306,20 +307,20 @@
 			<span class="TitStr">Information</span> &nbsp; 
 			<input type="button" onclick="GetInfo()" class="btn" value="&nbsp;Retrieve&nbsp;" id="GetInfo"><br /><br />
 			Heightest block and access time<br />
-			<input readonly maxlength="30" id="WORK" size="55" type="text" class="ReadOnlyInput" /><br /><br />
+			<input readonly id="WORK" type="text" class="ReadOnlyInput"/><br /><br />
 
 			The balance<br />
-			<input readonly maxlength="30" id="BALA" size="55" type="text" class="ReadOnlyInput" /><br /><br />
+			<input readonly id="BALA" type="text" class="ReadOnlyInput" /><br /><br />
 	
 			The nonce value<br />
-			<input readonly maxlength="30" id="NONC" size="55" type="text" class="ReadOnlyInput" /><br /><br />
+			<input readonly id="NONC" type="text" class="ReadOnlyInput" /><br /><br />
 	
 			Current gas per price (in Gwei)<br />
-			<input readonly maxlength="30" id="GASP" size="55" type="text" class="ReadOnlyInput" /><br /><br />
+			<input readonly id="GASP" type="text" class="ReadOnlyInput" /><br /><br />
 			
 			<!--<span style="color: gray">-->
 			Base gas per price for next block (Need EIP-1559) (in Gwei)<br />
-			<input readonly maxlength="30" id="BGASP" size="55" type="text" class="ReadOnlyInput" /><br />
+			<input readonly id="BGASP" type="text" class="ReadOnlyInput" /><br />
 			
 		</div>
 		<br />
