@@ -7,7 +7,6 @@ You only need to download oeww.htm and web3.min.js. (Put together and open with 
 It can sign transactions offline, let your PC/VM/Smartphone as a big cold wallet;  
 Or connect to RPC server, using as a super light wallet in a simple way.  
 
-Use web browser to open, default port is 1337.  
 In public beta. Full instructions will be released later.  
 
 Supports multiple ETH type chains, including ETC, AVAX...  
@@ -23,7 +22,6 @@ It's also an one page solution.
 它可以做離線簽名，這樣就可以使你的PC/手機成為一台大的冷錢包；  
 也可以連到RPC伺服器，讓它成為一個超級簡單的輕錢包。  
 
-使用瀏覽器開啟，預設 Port 為 1337。  
 公開測試中，完整說明會在稍晚釋出。
 
 支援多種ETH類型鏈，包括ETC、AVAX...
