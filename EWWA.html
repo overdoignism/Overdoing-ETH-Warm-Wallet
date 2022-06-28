@@ -242,42 +242,41 @@
 
 	</script>
 	<style>
-	body, button{font-family: serif; font-size: 20px; -webkit-font-smoothing: antialiased; font-smooth: always; float: left;}
-	input, select, textarea{font-size: 20px;}
-	.TitStr{font-size: 28px}
-	.btn{font-family: serif; font-size: 24px}
-	.good{border: 1px outset black; width:900px; height: auto; background-color:#eeeeff; padding: 0 15px 15px 15px; margin:0px auto; float: left;}
-	.good1{border:1px rgb(255, 255, 255); width:870px; height:auto; background-color:#e8daff; 
-		padding: 0 15px 15px 15px; margin:0px auto; line-height:1; font-family:serif; font-size: 16px; float: left;}
-	.good2{border:1px rgb(255, 255, 255); width:870px; height:auto; background-color:#bdd2f3; padding: 0 15px 25px 15px; margin:0px auto; float: left;}
-	.TxHash{background-color:#f7f1e6; border:solid 1px gray; font-family:sans-serif; background-color:#e6eff7; float: left;}
+	body, button, input, select, textarea{font-family: serif; font-size: 22px;}
+	.FixShit{font-family: serif; font-size: 22px;}
+	.TitStr{font-size: 30px}
+	.btn{font-family: serif; font-size: 26px}
+	.good{border: 1px outset black; width:900px; height: auto; background-color:#eeeeff; padding: 0 15px 15px 15px; margin:0px auto; }
+	.good1{border:1px rgb(255, 255, 255); width:870px; height:auto; background-color:#e8daff; padding: 0 15px 15px 15px; margin:0px auto; 
+		font-family:serif; font-size: 14px;}
+	.good2{border:1px rgb(255, 255, 255); width:870px; height:auto; background-color:#bdd2f3; padding: 0 15px 25px 15px; margin:0px auto;}
+	.TxHash{background-color:#f7f1e6; border:solid 1px gray; font-family:sans-serif; background-color:#e6eff7;}
 	.ReadOnlyInput{font-family:sans-serif; background-color:#e6eff7; border:solid 1px gray;}
-	.TxRes{font-family:sans-serif; font-size: 20px; background-color:#e6eff7; padding: 15px; border:solid 1px gray;}
+	.TxRes{font-family:sans-serif; background-color:#e6eff7; padding: 15px; border:solid 1px gray;}
 	.TxData{font-family:sans-serif; font-size: 20px; padding: 5px; border:solid 1px gray; background-color:#e6eff7; resize: none;}
 	.RPTxt{border: 0px outset black; width: auto; height: auto; background-color:#f7f1e6; padding: 15px 15px 15px 15px; margin:0px auto; color:#000000;
 		 display: flex; flex-direction: row; word-wrap: break-word; font-family:sans-serif;}
 	</style>
   </head>
   
-  <body onload="StartUp()">
+  <body style="float: left;" onload="StartUp()">
 
 	<br />
     <div id="title" class="good" style="border-bottom: 0px;">
 		<br />
 		<span style="font-size: 32px">ETH Warm Wallet assistant v0.5</span><br /><br />For handling the online part of the cold wallet. 
 		Using <a href=https://github.com/ChainSafe/web3.js>web3.js</a> API. Detected ver: <span id='web3v'></span><br /><br />
-	
-		<div id="block1" class="good1">
-			<br />
-			<b>* Declare *</b><br /><br />
-			It's a part of <a href='https://github.com/overdoignism/Overdoing-ETH-Warm-Wallet'>Overdoing ETH Warm Wallet</a>. Using <a href="https://github.com/overdoignism/Overdoing-ETH-Warm-Wallet/blob/main/LICENSE">MIT license.</a><br /><br />
-			<span style="color: #900000">
-			&#9888; The author has no any responsibility at any conditions. Please refer to MIT license. &#9888;</span><br /><br />
-			Welcome any currency tip: 0x7cE987d1C417DBb86CfE6f9Ac6cfEDF7554853AF<br />
+		<div id="block1" class="good1" style="float: left;">
+				<br />
+				<b>* Declare *</b><br /><br />
+				It's a part of <a href='https://github.com/overdoignism/Overdoing-ETH-Warm-Wallet'>Overdoing ETH Warm Wallet</a>. Using <a href="https://github.com/overdoignism/Overdoing-ETH-Warm-Wallet/blob/main/LICENSE">MIT license.</a><br /><br />
+				<span style="color: #900000">
+				&#9888; The author has no any responsibility at any conditions. Please refer to MIT license. &#9888;</span><br /><br />
+				Welcome any currency tip: 0x7cE987d1C417DBb86CfE6f9Ac6cfEDF7554853AF<br />
 		</div>
 	</div>
-	<br /><br />
 	<div id="main" class="good" style="border-top: 0px;">
+		<br />&nbsp;<br />
 		<div id="block2" class="good2">
 			<br />
 			<span class="TitStr">Initial</span><br /><br />
@@ -301,7 +300,7 @@
 			Sender&#39;address (optional) <br />
 			<input maxlength="69" id="ADDR" required="required" size="55" type="text" /><br />
 		</div>
-		<br />&nbsp;<br />
+		<br />
 		<div id="block3" class="good2">
 			<br />
 			<span class="TitStr">Information</span> &nbsp; 
@@ -323,62 +322,51 @@
 			<input readonly maxlength="30" id="BGASP" size="55" type="text" class="ReadOnlyInput" /><br />
 			
 		</div>
-		<br />&nbsp;<br />
+		<br />
 		<div id="block4" class="good2">
 			<br />
-			<span class="TitStr">Broadcast</span>
-			&nbsp; <input type="button" onclick="GoBroadcast()" id="DoItbtn" class="btn" value="&nbsp;Do it&nbsp;" />
+			<span class="TitStr">Broadcast</span> &nbsp; <input type="button" onclick="GoBroadcast()" id="DoItbtn" class="btn" value="&nbsp;Do it&nbsp;" />
 			<br /><br />
 			Paste signed transaction data here for broadcast<br />
-			<textarea name="SIGTR" id="SIGTR" rows="4" cols="60" class="TxData"></textarea><br /><br />
-
+			<textarea name="SIGTR" id="SIGTR" rows="4" cols="60" class="TxData"></textarea>
+		</div>
+		<div id="block41" class="good2" style="float: left;">
 			Broadcast result<br />
-			<div id="SIBR" class="TxRes">N/A</div><br />
-
-			Transaction Hash (Use this to trace in chain explorer) <br />
-			<!--<textarea readonly name="TH" id="TH" rows="2" cols="60" class="TxData"></textarea> &nbsp;  
-			<input type="button" onclick="Copy2Clipboard('TH')" id="Copy2clip" class="btn" value="&nbsp;Copy&nbsp;" />-->
-
+			<div id="SIBR" class="TxRes" style="width:840px;">N/A</div><br />
+			Transaction Hash (Use this to trace in chain explorer)<br />
 			<div id="TX01" class="RPTxt">
 				<div id="TH" style="margin: 10px; width: 70%;"><br />N/A<br /></div>
 				<div id="COPYBT1" style="margin: 10px; width: 30%; display: flex; align-items: center;">
 					<input type="button" onclick="Copy2Clipboard('TH')" id="Copy2clipTX" class="btn" value="&nbsp;Copy&nbsp;" />
 				</div>
 			</div>
-
-			<br />
 		</div>
 		<br />&nbsp;<br />
-		<div class="good2" style="text-align:center; padding: 20px 15px 20px 15px;">
+		<div id="TheEndi" class="good2" style="text-align:center; padding: 20px 15px 20px 15px;">
 			<input type="button" onclick="ClearAll()" id="CLR" class="btn" value="&nbsp;Clear&nbsp;" />
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<input type="button" onclick="window.close()" id="BYE" class="btn" value="&nbsp;Bye&nbsp;" />
 		</div>
-
 	</div>
-	<div id="blockAuto" class="good" style="border-top: 0px; display: none;">
-		<br />
 
+	<div id="blockAuto" class="good" style="border-top: 0px; display: none;">
+		<br />&nbsp;<br />
 		Broadcast data <br />
 		<div id="TX01" class="RPTxt">
-			<div id="Bdata" style="margin: 10px; width: 100%;" style="font-size: 20px; float: left;">N/A</div>
+			<div id="Bdata" style="margin: 10px; width: 100%; font-size: 20px;">N/A</div>
 		</div>
-
 		<br />Broadcast RPC server<br />
 		<input readonly id="RPC_SRV" size="80" type="text" class="TxHash" style="width: 100%; box-sizing: border-box;"/><br /><br />
 		
 		<p style="text-align:center">
 		<input type="button" onclick="GoBroadcastAuto()" id="DoItbtnA" class="btn" style="font-size: 64px;" value="&nbsp;Broadcast it&nbsp;" />
 		</p>
-		<br />
-
-		Broadcast result<br />
+		<br />Broadcast result<br />
 		<div id="SIBR2" class="TxRes">N/A</div><br />
 
 		Transaction Hash (Use this to trace in chain explorer) <br />
-
 		<div id="TX02" class="RPTxt">
-			<div id="TH2" style="margin: 10px; width: 70%; font-size: 20px; float: left;">N/A</div>
+			<div id="TH2" style="margin: 10px; width: 70%; font-size: 20px;">N/A</div>
 			<div id="COPYBT2" style="margin: 10px; width: 30%; display: flex; align-items: center;">
 				<input type="button" onclick="Copy2Clipboard('TH2')" id="Copy2clipTX2" class="btn" value="&nbsp;Copy&nbsp;" />
 			</div>
