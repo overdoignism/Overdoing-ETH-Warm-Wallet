@@ -44,6 +44,10 @@
 		}
 	}
 
+	async function CopyAddr(){
+		await navigator.clipboard.writeText('0x7cE987d1C417DBb86CfE6f9Ac6cfEDF7554853AF');
+	}
+
 	function ClearAll() {
 		document.getElementById('WORK').value = '';
 		document.getElementById('BALA').value = '';
@@ -248,8 +252,8 @@
 	.TitStr{font-size: 30px}
 	.btn{font-family: serif; font-size: 26px}
 	.good{border: 1px outset black; width:880px; height: auto; background-color:#eeeeff; padding: 0 15px 15px 15px; margin:0px auto; }
-	.good1{border:1px rgb(255, 255, 255); width:850px; height:auto; background-color:#e8daff; padding: 0 15px 15px 15px; margin:0px auto; 
-		font-family:serif; font-size: 14px;}
+	.Declare{border:1px rgb(255, 255, 255); width:850px; height:auto; background-color:#e8daff; padding: 0 15px 15px 15px; margin:0px auto; 
+		font-family:sans-serif; font-size: 16px; line-height:1;}
 	.good2{border:1px rgb(255, 255, 255); width:850px; height:auto; background-color:#bdd2f3; padding: 0 15px 25px 15px; margin:0px auto;}
 	.TxHash{background-color:#f7f1e6; border:solid 1px gray; font-family:sans-serif; background-color:#e6eff7;}
 	.ReadOnlyInput{font-family:sans-serif; background-color:#e6eff7; border:solid 1px gray; width:650px;}
@@ -266,17 +270,19 @@
 	<br />
     <div id="title" class="good" style="border-bottom: 0px;">
 		<br />
-		<span style="font-size: 32px">ETH Warm Wallet assistant v0.6</span><br />Handling the online part of the cold wallet. 
+		<span style="font-size: 32px">ETH Warm Wallet assistant v0.61</span><br />Handling the online part of the cold wallet. 
 		Using <a href=https://github.com/ChainSafe/web3.js>web3.js</a> API. Detected ver: <span id='web3v'></span><br /><br />
-		<div id="block1" class="good1">
+		<div id="block1" class="Declare">
 				<br />
 				<b>* Declare *</b><br /><br />
 				It's a part of <a href='https://github.com/overdoignism/Overdoing-ETH-Warm-Wallet'>Overdoing ETH Warm Wallet</a>. Using <a href="https://github.com/overdoignism/Overdoing-ETH-Warm-Wallet/blob/main/LICENSE">MIT license.</a><br /><br />
 				<span style="color: #900000">
 				&#9888; The author has no any responsibility at any conditions. Please refer to MIT license. &#9888;</span><br /><br />
-				Welcome any currency tip: 0x7cE987d1C417DBb86CfE6f9Ac6cfEDF7554853AF<br />
+				Welcome any currency tip: 0x7cE987d1C417DBb86CfE6f9Ac6cfEDF7554853AF 
+				<input type="button" onclick="CopyAddr()" id="CopyAddr" style="font-size: 16px;" value="&nbsp;Copy&nbsp;" />
 		</div>
-		<br />
+	</div>
+	<div id="main" class="good" style="border-top: 0px;">
 		<div id="block2" class="good2">
 			<br />
 			<span class="TitStr">Initial</span><br /><br />
@@ -328,9 +334,9 @@
 			<span class="TitStr">Broadcast</span> &nbsp; <input type="button" onclick="GoBroadcast()" id="DoItbtn" class="btn" value="&nbsp;Do it&nbsp;" />
 			<br /><br />
 			Paste signed transaction here for broadcast<br />
-			<textarea name="SIGTR" id="SIGTR" rows="4" class="TxData"></textarea>
+			<textarea name="SIGTR" id="SIGTR" rows="4" class="TxData" style="background-color: white;"></textarea>
 		</div>
-		<div id="block41" class="good2" style="float: left;">
+		<div id="block41" class="good2">
 			Broadcast result<br />
 			<div id="SIBR" class="TxRes">N/A</div><br />
 			Transaction Hash (For tracing on chain explorer)<br />
@@ -341,7 +347,7 @@
 				</div>
 			</div>
 		</div>
-		<br />&nbsp;<br />
+		<br />
 		<div id="TheEndi" class="good2" style="text-align:center; padding: 20px 15px 20px 15px;">
 			<input type="button" onclick="ClearAll()" id="CLR" class="btn" value="&nbsp;Clear&nbsp;" />
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -350,10 +356,10 @@
 	</div>
 
 	<div id="blockAuto" class="good" style="border-top: 0px; display: none;">
-		<br />&nbsp;<br />
+		<br />
 		Broadcast data <br />
-		<div id="TX01" class="RPTxt" style="float: left; width:870px;">
-			<div id="Bdata" style="margin: 10px; width: 100%; font-size: 20px;">N/A</div>
+		<div id="TX01" class="TxRes">
+			<div id="Bdata" style="margin: 10px; width: 90%; font-size: 22px;">N/A</div>
 		</div>
 		<br />&nbsp;<br />
 		Broadcast RPC server<br />
@@ -366,15 +372,15 @@
 		<div id="SIBR2" class="TxRes">N/A</div><br />
 
 		Transaction Hash (For tracing on chain explorer) <br />
-		<div id="TX02" class="RPTxt" style="float: left; width: 870px;">
-			<div id="TH2" style="margin: 10px; width: 70%; font-size: 20px;">N/A</div>
+		<div id="TX02" class="RPTxt" style="width: 850px;">
+			<div id="TH2" style="margin: 10px; width: 70%; font-size: 22px;">N/A</div>
 			<div id="COPYBT2" style="margin: 10px; width: 30%; display: flex; align-items: center;">
 				<input type="button" onclick="Copy2Clipboard('TH2')" id="Copy2clipTX2" class="btn" value="&nbsp;Copy&nbsp;" />
 			</div>
 		</div>
 		<br />
 		<p style="text-align:center">
-		<br />&nbsp;<br /><input type="button" onclick="window.close()" id="BYE2" class="btn" value="&nbsp;Bye&nbsp;" />
+		<input type="button" onclick="window.close()" id="BYE2" class="btn" value="&nbsp;Bye&nbsp;" />
 		</p>
 	</div>
   </body>
