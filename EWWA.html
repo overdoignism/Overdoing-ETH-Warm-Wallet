@@ -248,17 +248,16 @@
 	</script>
 	<style>
 	body, button, input, select, textarea{font-family: serif; font-size: 22px;}
-	.FixShit{font-family: serif; font-size: 22px;}
 	.TitStr{font-size: 30px}
 	.btn{font-family: serif; font-size: 26px}
-	.good{border: 1px outset black; width:880px; height: auto; background-color:#eeeeff; padding: 0 15px 15px 15px; margin:0px auto; }
-	.Declare{border:1px rgb(255, 255, 255); width:850px; height:auto; background-color:#e8daff; padding: 0 15px 15px 15px; margin:0px auto; 
+	.good{border: 1px outset black; width:780px; height: auto; background-color:#eeeeff; padding: 0 15px 15px 15px; margin:0px auto; }
+	.Declare{border:1px rgb(255, 255, 255); width:750px; height:auto; background-color:#e8daff; padding: 0 15px 15px 15px; margin:0px auto; 
 		font-family:sans-serif; font-size: 16px; line-height:1;}
-	.good2{border:1px rgb(255, 255, 255); width:850px; height:auto; background-color:#bdd2f3; padding: 0 15px 25px 15px; margin:0px auto;}
+	.good2{border:1px rgb(255, 255, 255); width:750px; height:auto; background-color:#bdd2f3; padding: 0 15px 25px 15px; margin:0px auto;}
 	.TxHash{background-color:#f7f1e6; border:solid 1px gray; font-family:sans-serif; background-color:#e6eff7;}
 	.ReadOnlyInput{font-family:sans-serif; background-color:#e6eff7; border:solid 1px gray; width:650px;}
 	.InputTxt{font-family:sans-serif; background-color:#ffffff; border:solid 1px gray; width:650px;}
-	.TxRes{font-family:sans-serif; background-color:#e6eff7; padding: 15px; border:solid 1px gray; width:820px;}
+	.TxRes{font-family:sans-serif; background-color:#e6eff7; padding: 15px; border:solid 1px gray; word-wrap: break-word;}
 	.TxData{font-family:sans-serif; padding: 5px; border:solid 1px gray; background-color:#e6eff7; resize: none; width:650px;}
 	.RPTxt{border: 0px outset black; width: auto; height: auto; background-color:#f7f1e6; padding: 15px 15px 15px 15px; margin:0px auto; color:#000000;
 		 display: flex; flex-direction: row; word-wrap: break-word; font-family:sans-serif;}
@@ -270,7 +269,7 @@
 	<br />
     <div id="title" class="good" style="border-bottom: 0px;">
 		<br />
-		<span style="font-size: 32px">ETH Warm Wallet assistant v0.61</span><br />Handling the online part of the cold wallet. 
+		<span style="font-size: 32px">ETH Warm Wallet assistant v0.611</span><br />Handling the online part of the cold wallet. 
 		Using <a href=https://github.com/ChainSafe/web3.js>web3.js</a> API. Detected ver: <span id='web3v'></span><br /><br />
 		<div id="block1" class="Declare">
 				<br />
@@ -358,9 +357,7 @@
 	<div id="blockAuto" class="good" style="border-top: 0px; display: none;">
 		<br />
 		Broadcast data <br />
-		<div id="TX01" class="TxRes">
-			<div id="Bdata" style="margin: 10px; width: 90%; font-size: 22px; word-wrap: break-word;">N/A</div>
-		</div>
+		<div id="Bdata" class="TxRes">N/A</div>
 		<br />&nbsp;<br />
 		Broadcast RPC server<br />
 		<input readonly id="RPC_SRV" size="80" type="text" class="TxHash" style="width: 100%; box-sizing: border-box;"/><br /><br />
@@ -372,7 +369,7 @@
 		<div id="SIBR2" class="TxRes">N/A</div><br />
 
 		Transaction Hash (For tracing on chain explorer) <br />
-		<div id="TX02" class="RPTxt" style="width: 850px;">
+		<div id="TX02" class="RPTxt" >
 			<div id="TH2" style="margin: 10px; width: 70%; font-size: 22px;">N/A</div>
 			<div id="COPYBT2" style="margin: 10px; width: 30%; display: flex; align-items: center;">
 				<input type="button" onclick="Copy2Clipboard('TH2')" id="Copy2clipTX2" class="btn" value="&nbsp;Copy&nbsp;" />
