@@ -172,7 +172,6 @@
 		var checklist = "<Alert>\n\n";
 		var NeedConfirm = false;
 
-
 		// Check Private key
 		try {
 			Private_Key = document.getElementById('S_PKEY').value;
@@ -185,10 +184,28 @@
 		// Check Address
 		Receiver_Addr = document.getElementById('R_ADDR').value;
 		Receiver_Addr = Receiver_Addr.trim();
-		if (!web3.utils.isAddress(Receiver_Addr)) {
+		var ValidChk = 0;
+		if(Receiver_Addr.slice(0,2).toLowerCase() != '0x'){
+			Receiver_Addr = '0x' + Receiver_Addr;
+			document.getElementById('R_ADDR').value = Receiver_Addr;
+		}
+		try {
+			var NewR_Addr = Web3.utils.toChecksumAddress(Receiver_Addr)
+		} catch(exception) {
 			alert("Receiver's address is invald or empty. Please check and try again.");
 			return;
 		}
+
+		if(NewR_Addr != Receiver_Addr) {
+				if (!confirm("Receiver's address has checksum failed.\n\nThis is not necessarily an error,\n\
+may be caused by case-insensitive input.\n\n\Please recheck the address you entered:\
+\n\n" + Receiver_Addr + "\n\nSelect OK to confirm.")) {
+				return;
+			} else {
+				Receiver_Addr = NewR_Addr;
+			}
+		}
+
 		LargeData = LargeData + "\n\nSender's address:\n" + TheSender.address;
 		LargeData = LargeData + "\n\nReceiver's address:\n" + Receiver_Addr;
 		if (TheSender.address == Receiver_Addr) {
@@ -338,7 +355,6 @@
 			alert(exception);
 			document.getElementById('DoItbtn').removeAttribute("disabled");
 		}
-
 	}
 
 	function Get_from_Wei(InputETH, weiwei) {
@@ -429,7 +445,7 @@
 	<br />
     <div id="main" class="good">
 		<br />
-		<span style="font-size: 32px">Overdoing ETH Warm Wallet v0.71</span><br />
+		<span style="font-size: 32px">Overdoing ETH Warm Wallet v0.72</span><br />
 		<span style="font-size: 22px">Using <a href=https://github.com/ChainSafe/web3.js>web3.js</a> API. Detected ver: <span id='web3v'></span></span><br /><br />
 		<div id="block1" class="Declare">
 			<br />
@@ -467,9 +483,9 @@
 	
 		<form method="POST" action="">
 			Transaction memo (Optional) <br />
-			<input maxlength="69" name="uname" id="uname" size="45" type="text" /> &nbsp;
+			<input maxlength="69" name="uname" id="uname" size="38" type="text" /> &nbsp;
 			<input type="submit" class="btn" value="&nbsp;Save (Reload)&nbsp;" title="For browser memory private key"><br /><br />
-			Private key <br />
+			Sender&#39;s private key <br />
 			<input maxlength="69" name="S_PKEY" id="S_PKEY" required="required" type="password" style="width: 100%; box-sizing: border-box;"/><br />
 		</form>
 
@@ -501,7 +517,7 @@
 		<div id="block4" class="good2">
 			<br /><span class="TitStr">Fill transaction data</span><br /><br />
 
-			Receiver&#39;s address<br />
+			Receiver&#39;s address (0x can be omitted, case match is better)<br />
 			<input id="R_ADDR" type="text" class="InputTxt"/><br /><br />
 			
 			How much cryptocurrency to send<br />
