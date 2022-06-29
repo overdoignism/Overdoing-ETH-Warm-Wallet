@@ -406,17 +406,17 @@
 	body, button, input, select, textarea{font-family: serif; font-size: 22px;}
 	.btn{font-family: serif; font-size: 26px}
 	.TitStr{font-size: 30px}
-	.good{border: 1px outset black; width:880px; height: auto; background-color:#eeeeff; padding: 0 15px 15px 15px; margin:0px auto;}
-	.Declare{border:1px rgb(255, 255, 255); width:850px; height:auto; background-color:#e8daff; 
+	.good{border: 1px outset black; width:780px; height: auto; background-color:#eeeeff; padding: 0 15px 15px 15px; margin:0px auto;}
+	.Declare{border:1px rgb(255, 255, 255); width:750px; height:auto; background-color:#e8daff; 
 		padding: 0 15px 15px 15px; margin:0px auto; line-height:1; font-family:sans-serif; font-size: 16px;}
-	.good2{border: 1px  rgb(255, 255, 255); width:850px; height: auto; background-color:#bdd2f3; padding: 0 15px 25px 15px; margin:0px auto;}
-	.cool1{border: 1px  rgb(255, 255, 255); width:820px; height: auto; background-color:#f0e1cb; padding: 0 15px 25px 15px; margin:0px auto;}
-	.cool2{border: 1px  rgb(255, 255, 255); width:820px; height: auto; background-color:#f0e1cb; padding: 15px 15px 15px 15px; margin:0px auto;}
+	.good2{border: 1px  rgb(255, 255, 255); width:750px; height: auto; background-color:#bdd2f3; padding: 0 15px 25px 15px; margin:0px auto;}
+	.cool1{border: 1px  rgb(255, 255, 255); width:720px; height: auto; background-color:#f0e1cb; padding: 0 15px 25px 15px; margin:0px auto;}
+	.cool2{border: 1px  rgb(255, 255, 255); width:720px; height: auto; background-color:#f0e1cb; padding: 15px 15px 15px 15px; margin:0px auto;}
 	.ReadOnlyInput{font-family:sans-serif; background-color:#f7f1e6; border:solid 1px gray; width:650px;}
 	.InputTxt{font-family:sans-serif; background-color:#ffffff; border:solid 1px gray; width:650px;}
 	.TxData{font-family:sans-serif; font-size: 20px; padding: 5px; border:solid 1px gray; background-color:#f7f1e6; resize: none;}
 	.TxHash{background-color:#f7f1e6; border:solid 1px gray; font-family:sans-serif; background-color:#f7f1e6; }
-	.TxRes{font-family:sans-serif; background-color:#f7f1e6; padding: 15px; border:solid 1px gray;}
+	.TxRes{font-family:sans-serif; background-color:#f7f1e6; padding: 15px; border:solid 1px gray; word-wrap: break-word;}
 	.qrdiv{border: 0px outset black; width: auto; height: auto; background-color:#ddddff; padding: 15px 15px 15px 15px; margin:0px auto; color:#502985;
 		 display: flex; flex-direction: row;}
 	.RPTxt{border: 0px outset black; width: auto; height: auto; background-color:#f7f1e6; padding: 15px 15px 15px 15px; margin:0px auto; color:#000000;
@@ -429,7 +429,7 @@
 	<br />
     <div id="main" class="good">
 		<br />
-		<span style="font-size: 32px">Overdoing ETH Warm Wallet v0.7</span><br />
+		<span style="font-size: 32px">Overdoing ETH Warm Wallet v0.71</span><br />
 		<span style="font-size: 22px">Using <a href=https://github.com/ChainSafe/web3.js>web3.js</a> API. Detected ver: <span id='web3v'></span></span><br /><br />
 		<div id="block1" class="Declare">
 			<br />
@@ -467,7 +467,7 @@
 	
 		<form method="POST" action="">
 			Transaction memo (Optional) <br />
-			<input maxlength="69" name="uname" id="uname" size="50" type="text" /> &nbsp;
+			<input maxlength="69" name="uname" id="uname" size="45" type="text" /> &nbsp;
 			<input type="submit" class="btn" value="&nbsp;Save (Reload)&nbsp;" title="For browser memory private key"><br /><br />
 			Private key <br />
 			<input maxlength="69" name="S_PKEY" id="S_PKEY" required="required" type="password" style="width: 100%; box-sizing: border-box;"/><br />
