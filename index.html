@@ -1,1 +1,401 @@
-<h1> Hello </h1>
+<html>
+  <head>
+    <title>ETH Warm Wallet assistant</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+	<!--<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9679749281117590"
+     crossorigin="anonymous"></script>-->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.7.4/web3.min.js"></script>
+	<script>
+	
+	var web3;
+
+	async function StartUp() {
+		web3 = new Web3(Web3.currentProvider);
+		document.getElementById('web3v').innerHTML = web3.version;
+		ClearAll();
+
+		var parameter = location.search.substr(1).split("&");
+
+		if(parameter.length == 2) {
+			var i;
+			var Cnt = 0;
+			var Tmp1;
+			for(i=0;i<=1;i++){
+				Tmp1 = parameter[i].split('=');
+				if (Tmp1[0] == 'RPC') {
+					document.getElementById('RPC_SRV').value = Tmp1[1];
+					Cnt = Cnt + 1;
+				}
+				if (Tmp1[0] == 'TX') {
+					document.getElementById('Bdata').innerHTML = Tmp1[1];
+					Cnt = Cnt + 1;
+				}
+			}
+			if (Cnt == 2) {
+				document.getElementById('main').style.display="none";
+				document.getElementById('blockAuto').style.display="";
+			}
+		}
+	}
+
+	async function Copy2Clipboard(what2copy){
+		var txt = document.getElementById(what2copy).innerHTML;
+		if (txt != ''){
+			await navigator.clipboard.writeText(txt);
+		}
+	}
+
+	async function CopyAddr(){
+		await navigator.clipboard.writeText('0x7cE987d1C417DBb86CfE6f9Ac6cfEDF7554853AF');
+	}
+
+	function ClearAll() {
+		document.getElementById('WORK').value = '';
+		document.getElementById('BALA').value = '';
+		document.getElementById('NONC').value = '';
+		document.getElementById('GASP').value = '';
+		document.getElementById('BGASP').value = '';
+		document.getElementById('ADDR').value = '';
+		document.getElementById('TH').innerHTML = '';
+		document.getElementById('SIGTR').value = '';
+		document.getElementById('SIBR').innerHTML = 'N/A';
+	}
+
+	async function GetInfo() {
+
+		var Worker2;
+		var fDate;
+		var DateString;
+		var BlockHeight;
+		document.getElementById('BALA').value = '';
+		document.getElementById('NONC').value = '';
+		document.getElementById('GASP').value = '';
+		document.getElementById('BGASP').value = '';
+		document.getElementById('WORK').value = '';
+		
+		try{	
+
+			document.getElementById('GetInfo').setAttribute("disabled","disabled");
+    		var Worker = document.getElementById('CC_TYPE').value;
+			Worker2 = Worker.split(',');
+			var RPC_Path = Worker2[2];
+			web3 = new Web3(RPC_Path);			
+			var Gas_Price;
+			Gas_Price = await web3.eth.getGasPrice();
+			BlockHeight = await web3.eth.getBlock("latest");
+
+			var Sender_Balance;
+			var Sender_nonce;
+
+			var Addr = document.getElementById('ADDR').value;
+			Addr = Addr.trim();
+			if (Addr != ''){				
+				Sender_Balance = await web3.eth.getBalance(Addr);
+				Sender_Balance = Cut_Zero(Get_from_Wei(Sender_Balance.toString(),18).toString());
+				Sender_nonce = await web3.eth.getTransactionCount(Addr);
+			} else {
+				Sender_Balance = '(Need address)';
+				Sender_nonce = '(Need address)';
+			}
+
+			fDate = new Date(Date.now());
+			DateString = fDate.getFullYear() + '/' + fDate.getMonth() + '/' + fDate.getDay() + ' '+fDate.getHours() + ':' + fDate.getMinutes()+ ':' + fDate.getSeconds();
+			document.getElementById('WORK').value = Worker2[0] + ' Block height: ' + BlockHeight.number + '  Access Time:' + DateString;
+			document.getElementById('GASP').value = Cut_Zero(Get_from_Wei(Gas_Price.toString(),9).toString());
+			document.getElementById('BALA').value = Sender_Balance;
+			document.getElementById('NONC').value = Sender_nonce;
+
+			if (BlockHeight.baseFeePerGas){
+				document.getElementById('BGASP').value = Cut_Zero(Get_from_Wei(BlockHeight.baseFeePerGas.toString(),9).toString());
+			} else {
+				document.getElementById('BGASP').value = '(Not support EIP-1559)';
+			}
+
+		} catch (exception) {
+			alert(exception);
+		}
+		document.getElementById('GetInfo').removeAttribute("disabled");
+	}
+
+	async function GoBroadcast() {
+
+		document.getElementById('SIBR').value = '';
+		document.getElementById('TH').innerHTML = '';
+
+		if (document.getElementById('SIGTR').value == '') {
+			alert('Signed transaction data is empty.');
+			return;
+		}
+
+		var TS_status;
+		TS_status = 'Waiting transaction be broadcast...it may take long time.<br /><br />';
+		TS_status = TS_status + 'If waiting too long, recheck the filled data, and remake an new transaction.<br /><br />(Maybe gas too low, etc.)';
+		document.getElementById('SIBR').innerHTML = TS_status;
+
+		try {
+			document.getElementById('DoItbtn').setAttribute("disabled","disabled");
+			var Worker = document.getElementById('CC_TYPE').value;
+			Worker2 = Worker.split(',');
+			var RPC_Path = Worker2[2];
+			web3 = new Web3(RPC_Path);
+			var TransactionSign = document.getElementById('SIGTR').value;
+			var getTransactionReceipt = await web3.eth.sendSignedTransaction(TransactionSign);
+
+			if (getTransactionReceipt.status) {
+				TS_status = "Success.";
+				TS_status = TS_status + "<br /><br />Block number: " + getTransactionReceipt.blockNumber;
+				TS_status = TS_status + "<br /><br />Index in Block: " + getTransactionReceipt.transactionIndex;
+				TS_status = TS_status + "<br /><br />This transaction is already on the chain.<br /><br />Attention: The signed transaction data is not reusable.";
+			} else { 
+				TS_status = "Reverted.<br /><br />"; //" Recheck the filled data, and remake an new transaction.";
+				TS_status = TS_status + getRevertReason(getTransactionReceipt.transactionHash);
+			};
+
+			document.getElementById('SIBR').innerHTML = TS_status;
+			document.getElementById('TH').innerHTML = getTransactionReceipt.transactionHash;
+			document.getElementById('SIGTR').value = '';
+
+		} catch (exception) {
+			alert(exception);
+			document.getElementById('SIBR').innerHTML = exception + "<br /><br />Please verify cryptocurrency / RPC server is correct.";
+		}
+		document.getElementById('DoItbtn').removeAttribute("disabled");
+	}
+
+	async function GoBroadcastAuto() {
+
+		var TS_status;
+		TS_status = 'Waiting transaction be broadcast...it may take long time.<br /><br />';
+		TS_status = TS_status + 'If waiting too long, recheck the filled data, and remake an new transaction.<br /><br />(Maybe gas too low, etc.)';
+		document.getElementById('SIBR2').innerHTML = TS_status;
+
+		try {
+
+			document.getElementById('DoItbtnA').setAttribute("disabled","disabled");
+			var RPCSRV = document.getElementById('RPC_SRV').value;
+			web3 = new Web3(RPCSRV);
+			var TransactionSign = document.getElementById('Bdata').innerHTML;
+			var getTransactionReceipt = await web3.eth.sendSignedTransaction(TransactionSign);
+
+			if (getTransactionReceipt.status) {
+				TS_status = "Success.";
+				TS_status = TS_status + "<br /><br />Block number: " + getTransactionReceipt.blockNumber;
+				TS_status = TS_status + "<br /><br />Index in Block: " + getTransactionReceipt.transactionIndex;
+				TS_status = TS_status + "<br /><br />This transaction is already on the chain.<br /><br />Attention: The signed transaction data is not reusable.";
+			} else { 
+				TS_status = "Reverted.<br /><br />"; //" Recheck the filled data, and remake an new transaction.";
+				TS_status = TS_status + getRevertReason(getTransactionReceipt.transactionHash);
+			};
+
+			document.getElementById('SIBR2').innerHTML = TS_status;
+			document.getElementById('TH2').innerHTML = getTransactionReceipt.transactionHash;
+
+		} catch (exception) {
+			document.getElementById('SIBR2').innerHTML = exception + "<br /><br />Please verify cryptocurrency / RPC server is correct.";
+		}
+	}
+
+	async function getRevertReason(txHash) {
+		try {
+			const tx = await web3.eth.getTransaction(txHash);
+			var result = await web3.eth.call(tx, tx.blockNumber);
+			result = result.startsWith('0x') ? result : `0x${result}`
+			if (result && result.substr(138)) {
+ 				const reason = 'Reason: ' + web3.utils.toAscii(result.substr(138));
+  				return reason;
+			} else {
+				return 'Reason: Unknow.'
+			}
+		} catch {
+			return 'Reason: Unknow. Error happend.'
+		}
+	}
+
+	function Get_from_Wei(InputETH, weiwei) {
+		var TmpWorker01;
+		var TmpWorker02 = InputETH.toString();
+		if (InputETH == '0') {
+			return '0';
+		}
+		if (TmpWorker02.length <= weiwei) {
+			TmpWorker01 = '0'.repeat(weiwei - TmpWorker02.length);
+			TmpWorker01 = '0.' + TmpWorker01 + TmpWorker02;
+		} else {
+			TmpWorker01 = TmpWorker02.slice(0, TmpWorker02.length - weiwei);
+			TmpWorker01 = TmpWorker01 + '.' + TmpWorker02.slice(TmpWorker02.length - weiwei);
+		}
+		return TmpWorker01;
+	}
+
+	function Cut_Zero(WhatToCut) {
+		var TmpWorker01;
+		var TmpWorker02;
+		var i;
+		if ((WhatToCut == '0') || (WhatToCut.length == 0)) {
+			return '0.0';
+		} else {
+			for (i = (WhatToCut.length - 1); i >= 0; i--) {
+				TmpWorker02 = WhatToCut.charAt(i);
+				if (TmpWorker02 != '0') {
+					TmpWorker01 = WhatToCut.slice(0, i + 1);
+					if (TmpWorker01.slice(-1) == '.'){TmpWorker01 = TmpWorker01 + '0';}
+					break;
+				}
+			}
+			return TmpWorker01;
+		}
+	}
+
+	</script>
+	<style>
+	body, button, input, select, textarea{font-family: serif; font-size: 22px;}
+	.TitStr{font-size: 30px}
+	.btn{font-family: serif; font-size: 26px}
+	.good{border: 1px outset black; width:780px; height: auto; background-color:#eeeeff; padding: 0 15px 15px 15px; margin:0px auto; }
+	.Declare{border:1px rgb(255, 255, 255); width:750px; height:auto; background-color:#e8daff; padding: 0 15px 15px 15px; margin:0px auto; 
+		font-family:sans-serif; font-size: 16px; line-height:1;}
+	.good2{border:1px rgb(255, 255, 255); width:750px; height:auto; background-color:#bdd2f3; padding: 0 15px 25px 15px; margin:0px auto;}
+	.TxHash{background-color:#f7f1e6; border:solid 1px gray; font-family:sans-serif; background-color:#e6eff7;}
+	.ReadOnlyInput{font-family:sans-serif; background-color:#e6eff7; border:solid 1px gray; width:650px;}
+	.InputTxt{font-family:sans-serif; background-color:#ffffff; border:solid 1px gray; width:650px;}
+	.TxRes{font-family:sans-serif; background-color:#e6eff7; padding: 15px; border:solid 1px gray; word-wrap: break-word;}
+	.TxData{font-family:sans-serif; padding: 5px; border:solid 1px gray; background-color:#e6eff7; resize: none; width:650px;}
+	.RPTxt{border: 0px outset black; width: auto; height: auto; background-color:#f7f1e6; padding: 15px 15px 15px 15px; margin:0px auto; color:#000000;
+		 display: flex; flex-direction: row; word-wrap: break-word; font-family:sans-serif;}
+	</style>
+  </head>
+  
+  <body style="float: left;" onload="StartUp()">
+	<div class="good" id="GoogleAds" align="center">
+		<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9679749281117590"
+     		crossorigin="anonymous"></script>
+		<!-- 多媒體廣告-橫幅-EWWA -->
+		<ins class="adsbygoogle"
+     		style="display:block"
+     		data-ad-client="ca-pub-9679749281117590"
+     		data-ad-slot="7001150671"
+     		data-ad-format="auto"
+     		data-full-width-responsive="true"></ins>
+		<script>
+     		(adsbygoogle = window.adsbygoogle || []).push({});
+		</script>
+	</div>
+    <div id="title" class="good" style="border-bottom: 0px;">
+		<br />
+		<span style="font-size: 32px">ETH Warm Wallet assistant v0.613</span><br />Handling the online part of the cold wallet. 
+		Using <a href=https://github.com/ChainSafe/web3.js>web3.js</a> API. Detected ver: <span id='web3v'></span><br /><br />
+		<div id="block1" class="Declare">
+				<br />
+				<b>* Declare *</b><br /><br />
+				It's a part of <a href='https://github.com/overdoignism/Overdoing-ETH-Warm-Wallet'>Overdoing ETH Warm Wallet</a>. Using <a href="https://github.com/overdoignism/Overdoing-ETH-Warm-Wallet/blob/main/LICENSE">MIT license.</a><br /><br />
+				<span style="color: #900000">
+				&#9888; The author has no any responsibility at any conditions. Please refer to MIT license. &#9888;</span><br /><br />
+				Welcome any currency tip: 0x7cE987d1C417DBb86CfE6f9Ac6cfEDF7554853AF 
+				<input type="button" onclick="CopyAddr()" id="CopyAddr" style="font-size: 16px;" value="&nbsp;Copy&nbsp;" />
+		</div>
+	</div>
+	<div id="main" class="good" style="border-top: 0px;">
+		<div id="block2" class="good2">
+			<br />
+			<span class="TitStr">Initial</span><br /><br />
+			Select currency type &amp; RPC server<br />
+			<select id="CC_TYPE" class="InputTxt">
+			<option selected="selected" value="ETH,1,https://rpc.ankr.com/eth">ETH: Ethereum Mainnet (Ankr)</option>
+			<option value="ETH,1,https://cloudflare-eth.com">ETH: Ethereum Mainnet (Cloudflare)</option>
+			<option value="ETH,1,https://main-rpc.linkpool.io">ETH: Ethereum Mainnet (LinkPool)</option>
+			<option value="AVAX,43114,https://rpc.ankr.com/avalanche">AVAX: Avalanche C-Chain (Ankr)</option>
+			<option value="BNB,56,https://rpc.ankr.com/bsc">BNB: Binance Smart Chain Mainnet (Ankr)</option>
+			<option value="CRO,25,https://evm.cronos.org">CRO: Cronos Mainnet</option>
+			<option value="ETC,61,https://www.ethercluster.com/etc">ETC: Ethereum Classic Mainnet</option>
+			<option value="FTM,250,https://rpc.ankr.com/fantom">FTM: Fantom Mainnet (Ankr)</option>
+			<option value="HT,128,https://http-mainnet.hecochain.com">HT: Huobi ECO Chain Mainnet</option>
+			<option value="KLAY,8217,https://public-node-api.klaytnapi.com/v1/cypress">KLAY: Klaytn Mainnet Cypress</option>
+			<option value="MATIC,137,https://rpc.ankr.com/polygon">MATIC: Polygon Mainnet (Ankr)</option>
+			<option value="OKT,66,https://exchainrpc.okex.org">OKT: OKXChain Mainnet (OKEX)</option>
+			<option value="GOR,5,https://rpc.goerli.mudit.blog/">GOR: Gorli Ethereum Testnet</option>
+			</select><br /><br />
+	
+			Sender&#39; address (optional) <br />
+			<input maxlength="69" id="ADDR" required="required" type="text" style="width:650px;"/><br />
+		</div>
+		<br />
+		<div id="block3" class="good2">
+			<br />
+			<span class="TitStr">Information</span> &nbsp; 
+			<input type="button" onclick="GetInfo()" class="btn" value="&nbsp;Retrieve&nbsp;" id="GetInfo"><br /><br />
+			Heightest block and access time<br />
+			<input readonly id="WORK" type="text" class="ReadOnlyInput"/><br /><br />
+
+			The balance<br />
+			<input readonly id="BALA" type="text" class="ReadOnlyInput" /><br /><br />
+	
+			The nonce value<br />
+			<input readonly id="NONC" type="text" class="ReadOnlyInput" /><br /><br />
+	
+			Current gas per price (in Gwei)<br />
+			<input readonly id="GASP" type="text" class="ReadOnlyInput" /><br /><br />
+			
+			<!--<span style="color: gray">-->
+			Base gas per price for next block (Need EIP-1559) (in Gwei)<br />
+			<input readonly id="BGASP" type="text" class="ReadOnlyInput" /><br />
+			
+		</div>
+		<br />
+		<div id="block4" class="good2">
+			<br />
+			<span class="TitStr">Broadcast</span> &nbsp; <input type="button" onclick="GoBroadcast()" id="DoItbtn" class="btn" value="&nbsp;Do it&nbsp;" />
+			<br /><br />
+			Paste signed transaction here for broadcast<br />
+			<textarea name="SIGTR" id="SIGTR" rows="4" class="TxData" style="background-color: white;"></textarea>
+		</div>
+		<div id="block41" class="good2">
+			Broadcast result<br />
+			<div id="SIBR" class="TxRes">N/A</div><br />
+			Transaction Hash (For tracing on chain explorer)<br />
+			<div id="TX01" class="RPTxt">
+				<div id="TH" style="margin: 10px; width: 70%;"><br />N/A<br /></div>
+				<div id="COPYBT1" style="margin: 10px; width: 30%; display: flex; align-items: center;">
+					<input type="button" onclick="Copy2Clipboard('TH')" id="Copy2clipTX" class="btn" value="&nbsp;Copy&nbsp;" />
+				</div>
+			</div>
+		</div>
+		<br />
+		<div id="TheEndi" class="good2" style="text-align:center; padding: 20px 15px 20px 15px;">
+			<input type="button" onclick="ClearAll()" id="CLR" class="btn" value="&nbsp;Clear&nbsp;" />
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<input type="button" onclick="window.close()" id="BYE" class="btn" value="&nbsp;Bye&nbsp;" />
+		</div>
+	</div>
+
+	<div id="blockAuto" class="good" style="border-top: 0px; display: none;">
+		<br />
+		Broadcast data <br />
+		<div id="Bdata" class="TxRes">N/A</div>
+		<br />&nbsp;<br />
+		Broadcast RPC server<br />
+		<input readonly id="RPC_SRV" size="80" type="text" class="TxHash" style="width: 100%; box-sizing: border-box;"/><br /><br />
+		
+		<p style="text-align:center">
+		<input type="button" onclick="GoBroadcastAuto()" id="DoItbtnA" class="btn" style="font-size: 64px;" value="&nbsp;Broadcast it&nbsp;" />
+		</p>
+		<br />Broadcast result<br />
+		<div id="SIBR2" class="TxRes">N/A</div><br />
+
+		Transaction Hash (For tracing on chain explorer) <br />
+		<div id="TX02" class="RPTxt" >
+			<div id="TH2" style="margin: 10px; width: 70%; font-size: 22px;">N/A</div>
+			<div id="COPYBT2" style="margin: 10px; width: 30%; display: flex; align-items: center;">
+				<input type="button" onclick="Copy2Clipboard('TH2')" id="Copy2clipTX2" class="btn" value="&nbsp;Copy&nbsp;" />
+			</div>
+		</div>
+		<br />
+		<p style="text-align:center">
+		<input type="button" onclick="window.close()" id="BYE2" class="btn" value="&nbsp;Bye&nbsp;" />
+		</p>
+	</div>
+  </body>
+  
+  
+</html>
+
+
