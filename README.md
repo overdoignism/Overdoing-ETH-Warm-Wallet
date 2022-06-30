@@ -1,15 +1,14 @@
 # Overdoing-ETH-Warm-Wallet
 
 ## English
-It's an offline/online dual purpose wallet for ETHs , Open source.  
-You only need to download oeww.htm and web3.min.js. (Put together and open with browser)  
+It's an offline/online dual purpose wallet for ETHs , fully open source.  
+You only need to download oeww.htm .
 
 It can sign transactions offline, let your PC/VM/Smartphone as a big cold wallet;  
 Or connect to RPC server, using as a super light wallet in a simple way.  
+Supports multiple ETH type chains, including ETC, AVAX...  
 
 In public beta. Full instructions will be released later.  
-
-Supports multiple ETH type chains, including ETC, AVAX...  
 
 Note: If you need mnemonic code and private key generator,  
 you can visit this project: [BIP39 by iancoleman](https://github.com/iancoleman/bip39)  
@@ -17,7 +16,7 @@ It's also an one page solution.
 
 ## 中文
 這是一個連線／離線兩用的ETH錢包程式，完全開源。  
-你只需要下載 oeww.htm 與 web3.min.js 就能讓他工作起來。(放在一起用瀏覽器開啟即可) 
+你只需要下載 oeww.htm 就能讓他工作起來。
 
 它可以做離線簽名，這樣就可以使你的PC/手機成為一台大的冷錢包；  
 也可以連到RPC伺服器，讓它成為一個超級簡單的輕錢包。  
