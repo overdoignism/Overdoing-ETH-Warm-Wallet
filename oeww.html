@@ -29,13 +29,15 @@
 	
 	var web3;
 	var assistant;
+	var ConfirmChoice;
+	const timeout = async ms => new Promise(res => setTimeout(res, ms));
 
-	async function StartUp() {
+	window.addEventListener("load", function(){
 		web3 = new Web3(Web3.currentProvider);
 		document.getElementById('web3v').innerHTML = web3.version;
 		assistant = 'https://overdoignism.github.io/Overdoing-ETH-Warm-Wallet/EWWA.html?'
 		ClearAll()
-	}
+	});
 
 	function ClearAll() {
 		document.getElementById('uname').value = '';
@@ -59,10 +61,9 @@
 		document.getElementById('Info02').style.display="none";
 		document.getElementById('BroadcastDiv2').style.display="none";
 
-		//document.getElementById('QrcodeDIV').innerHTML = '';
-		//document.getElementById('QrcodeDIV2').innerHTML = '';
-		document.getElementById('TxHash').value = '';
 		document.getElementById('DoItbtn').setAttribute("disabled","disabled");
+		document.getElementById('DarkPaper').style.display='none';
+		document.getElementById('DPaper2').style.display='none';
 	}
 
 	async function Copy2Clipboard(what2copy){
@@ -104,7 +105,8 @@
 			Private_Key = document.getElementById('S_PKEY').value;
 			TheSender = web3.eth.accounts.privateKeyToAccount(Private_Key);
 		} catch {
-			alert('Private Key is empty or error. Please check and try again.')
+			document.getElementById('DarkPaper').style.display="";
+			document.getElementById('ErrMsg').innerHTML = "Private Key is empty or error. Please check and try again.";
 			document.getElementById('GetInfo').removeAttribute("disabled");
 			return;
 		}
@@ -146,7 +148,8 @@
 			}
 
 		} catch (exception) {
-			alert(exception);
+			document.getElementById('DarkPaper').style.display="";
+			document.getElementById('ErrMsg').innerHTML = exception + "<br/><br/>Please check if internet connected, and RPC server is alive.";
 		}
 
 		document.getElementById('GetInfo').removeAttribute("disabled");
@@ -168,8 +171,8 @@
 		var Receiver_Addr;
 		var The_Nonce = document.getElementById('S_NONC').value;
 		var TrueSendGas;
-		var LargeData = "<Please confirm>\n\nCryptocurrency: " + Worker2[0] + '   (ChainID: ' + Worker2[1]+')';
-		var checklist = "<Alert>\n\n";
+		var LargeData = "Cryptocurrency: " + Worker2[0] + '   (ChainID: ' + Worker2[1]+')';
+		var checklist = "";
 		var NeedConfirm = false;
 
 		// Check Private key
@@ -177,7 +180,8 @@
 			Private_Key = document.getElementById('S_PKEY').value;
 			TheSender = web3.eth.accounts.privateKeyToAccount(Private_Key);
 		} catch {
-			alert('Private Key empty or error. Please check and try again.');
+			document.getElementById('DarkPaper').style.display="";
+			document.getElementById('ErrMsg').innerHTML = 'Private Key empty or incorrect. Please check and try again.';
 			return;
 		}
 
@@ -192,24 +196,43 @@
 		try {
 			var NewR_Addr = Web3.utils.toChecksumAddress(Receiver_Addr)
 		} catch(exception) {
-			alert("Receiver's address is invald or empty. Please check and try again.");
+			document.getElementById('DarkPaper').style.display="";
+			document.getElementById('ErrMsg').innerHTML = "Receiver's address is invald or empty. Please check and try again.";
 			return;
 		}
 
 		if(NewR_Addr != Receiver_Addr) {
-				if (!confirm("Receiver's address has checksum failed.\n\nThis is not necessarily an error,\n\
-may be caused by case-insensitive input.\n\n\Please recheck the address you entered:\
-\n\n" + Receiver_Addr + "\n\nSelect OK to confirm.")) {
-				return;
-			} else {
-				Receiver_Addr = NewR_Addr;
+
+			document.getElementById('DPaper2').style.display="";
+			document.getElementById('ConTit').innerHTML="&#9888; Confirm"
+			document.getElementById('ConMsg').innerHTML="Receiver's address has checksum failed.<br /><br />\
+			This is not necessarily an error,<br />may be caused by case-insensitive input.<br /><br />\
+			Please recheck the receiver&#39;s address you entered:<br /><br />" + Receiver_Addr + "<br /><br />Select &#39;OK&#39; to confirm."
+
+			ConfirmChoice = 0;
+			var next = true;
+			while (next) {
+				await timeout(50);
+				switch(ConfirmChoice){
+					case '1': {
+						next = false;
+						Receiver_Addr = NewR_Addr;
+						document.getElementById('DPaper2').style.display="none";
+						break;
+					}
+					case '2': {
+						document.getElementById('DPaper2').style.display="none";
+						return;
+					}
+					default:
+				}
 			}
 		}
 
-		LargeData = LargeData + "\n\nSender's address:\n" + TheSender.address;
-		LargeData = LargeData + "\n\nReceiver's address:\n" + Receiver_Addr;
-		if (TheSender.address == Receiver_Addr) {
-			checklist = checklist + "● Sender's address is the same receiver's.\n\n";	
+		LargeData = LargeData + "<br/><br/>Sender's address:<br/>" + TheSender.address;
+		LargeData = LargeData + "<br/><br/>Receiver's address:<br/>" + Receiver_Addr;
+		if (TheSender.address.toLowerCase() == Receiver_Addr.toLowerCase()) {
+			checklist = checklist + "● Sender's address is the same receiver's.<br /><br />";	
 			NeedConfirm = true;
 		}
 
@@ -219,9 +242,9 @@ may be caused by case-insensitive input.\n\n\Please recheck the address you ente
 		SETHBN2Back = SETHBN2Back.mul(ETHtoWei);
 		SETHBN2Back = SETHBN2Back.div(new BN(GetMulWhat(SendETH)));
 		TrueSendETH = SETHBN2Back.toString();
-		LargeData = LargeData + "\n\nHow much currency to send: " + SendETH + ' ' + Worker2[0];
+		LargeData = LargeData + "<br/><br/>How much currency to send: " + SendETH + ' ' + Worker2[0];
 		if (TrueSendETH == 0) {
-			checklist = checklist + "● The sending currency is zero.\n\n";
+			checklist = checklist + "● The sending currency is zero.<br /><br />";
 			NeedConfirm = true;
 		}
 		
@@ -234,13 +257,14 @@ may be caused by case-insensitive input.\n\n\Please recheck the address you ente
 			GasBN2Back = GasBN2Back.div(new BN(GetMulWhat(Gas_Price)));
 			TrueSendGas = GasBN2Back.toString();
 		} else {
-			alert('The Gas price must be > 0 , please correct it.');
+			document.getElementById('DarkPaper').style.display="";
+			document.getElementById('ErrMsg').innerHTML = 'The Gas price must be > 0 , please correct it.';
 			return;
 		}
 		var TrueGasTotal;
 		var GasTotBN2Back = GasBN2Back.mul(new BN('21000'));
 		TrueGasTotal = Cut_Zero(Get_from_Wei(GasTotBN2Back.toString(), 18));
-		LargeData = LargeData + "\n\nGas price: " + Gas_Price + " Gwei  \n\nTotal gas cost (x21000): " + TrueGasTotal + ' ' + Worker2[0];
+		LargeData = LargeData + "<br/><br/>Gas price: " + Gas_Price + " Gwei  <br/><br/>Total gas cost (x21000): " + TrueGasTotal + ' ' + Worker2[0];
 
 		// Check balance enough if balance exist 
 		var Sender_BalanceBN;
@@ -251,10 +275,10 @@ may be caused by case-insensitive input.\n\n\Please recheck the address you ente
 			Sender_BalanceBN = new BN(Sender_Balance.toString());
 			Sender_BalanceBN = Sender_BalanceBN.sub(GasTotBN2Back);
 			Sender_BalanceBN = Sender_BalanceBN.sub(SETHBN2Back);
-			TmpStr = "\n\nEstimated balance: " + Cut_Zero(Get_from_Wei(Sender_BalanceBN.toString(), 18)) + ' ' + Worker2[0] ;
+			TmpStr = "<br/><br/>Estimated balance: " + Cut_Zero(Get_from_Wei(Sender_BalanceBN.toString(), 18)) + ' ' + Worker2[0] ;
 			if (Sender_BalanceBN.isNeg()) {
-				checklist = checklist + "● Sending currency + gas > balance. Broadcast could fail.\n\n";
-				TmpStr = "\n\nEstimated balance: N/A"
+				checklist = checklist + "● Sending currency + gas > balance. Broadcast could be fail.<br /><br />";
+				TmpStr = "<br/><br/>Estimated balance: N/A"
 				NeedConfirm = true;
 			}
 			LargeData = LargeData + TmpStr;
@@ -262,18 +286,55 @@ may be caused by case-insensitive input.\n\n\Please recheck the address you ente
 
 		// if Alert
 		if (NeedConfirm){
-			checklist = checklist + "Forced to continue, please select 'OK', else 'Cancel'.";
-			if(!confirm(checklist)) {
-				return;
+			checklist = checklist + "Forced to continue, please select &#39;OK&#39;, else &#39;Cancel&#39;.";
+
+			document.getElementById('DPaper2').style.display="";
+			document.getElementById('ConTit').innerHTML="&#9888; Confirm"
+			document.getElementById('ConMsg').innerHTML=checklist;
+
+			ConfirmChoice = 0;
+			var next = true;
+			while (next) {
+				await timeout(50);
+				switch(ConfirmChoice){
+					case '1': {
+						next = false;
+						document.getElementById('DPaper2').style.display="none";
+						break;
+					}
+					case '2': {
+						document.getElementById('DPaper2').style.display="none";
+						return;
+					}
+					default:
+				}
 			}
 		}
 
-		LargeData = LargeData + "\n\nNonce: " + The_Nonce;
-		LargeData = LargeData + "\n\nIf you confirm it's correct, press 'Ok', else 'Cancel'.";
+		LargeData = LargeData + "<br/><br/>Nonce: " + The_Nonce;
+		LargeData = LargeData + "<br/><br/>If you confirm it's correct, press &#39;Ok&#39;, else &#39;Cancel&#39;.";
 		
-		if(!confirm(LargeData)) {
-			return;
-		}
+		document.getElementById('DPaper2').style.display="";
+		document.getElementById('ConTit').innerHTML="&#9888; Final check"
+			document.getElementById('ConMsg').innerHTML=LargeData;
+
+			ConfirmChoice = 0;
+			var next = true;
+			while (next) {
+				await timeout(50);
+				switch(ConfirmChoice){
+					case '1': {
+						next = false;
+						document.getElementById('DPaper2').style.display="none";
+						break;
+					}
+					case '2': {
+						document.getElementById('DPaper2').style.display="none";
+						return;
+					}
+					default:
+				}
+			}
 
 		var transaction = {
 			to: Receiver_Addr,
@@ -306,7 +367,8 @@ may be caused by case-insensitive input.\n\n\Please recheck the address you ente
 			document.getElementById('DoItbtn').removeAttribute("disabled");
 			document.getElementById('TxSigned2').style.display="";
 		} catch (exception) {
-			alert(exception);
+			document.getElementById('DarkPaper').style.display="";
+			document.getElementById('ErrMsg').innerHTML = exception;
 			return;
 		}
 	}
@@ -316,7 +378,8 @@ may be caused by case-insensitive input.\n\n\Please recheck the address you ente
 		var TransactionSign = document.getElementById('MTR_SIGN').innerHTML; //SIGTR
 
 		if (TransactionSign.length <= 3) {
-			alert('Signed transaction is empty. Make it first.');
+			document.getElementById('DarkPaper').style.display="";
+			document.getElementById('ErrMsg').innerHTML = 'Signed transaction is empty. Make it first.';
 			return;
 		}
 
@@ -351,8 +414,7 @@ may be caused by case-insensitive input.\n\n\Please recheck the address you ente
 			document.getElementById('SIBR').innerHTML = TS_status;
 
 		} catch (exception) {
-			document.getElementById('SIBR').innerHTML = exception;
-			alert(exception);
+			document.getElementById('SIBR').innerHTML = exception + "<br/><br/>Please check if internet connected, and RPC server is alive.";
 			document.getElementById('DoItbtn').removeAttribute("disabled");
 		}
 	}
@@ -416,7 +478,7 @@ may be caused by case-insensitive input.\n\n\Please recheck the address you ente
 			return 'Reason: Unknow. Error happend.'
 		}
 	}
-
+	
 </script>
 	<style>
 	body, button, input, select, textarea{font-family: serif; font-size: 22px;}
@@ -431,16 +493,59 @@ may be caused by case-insensitive input.\n\n\Please recheck the address you ente
 	.ReadOnlyInput{font-family:sans-serif; background-color:#f7f1e6; border:solid 1px gray; width:650px;}
 	.InputTxt{font-family:sans-serif; background-color:#ffffff; border:solid 1px gray; width:650px;}
 	.TxData{font-family:sans-serif; font-size: 20px; padding: 5px; border:solid 1px gray; background-color:#f7f1e6; resize: none;}
-	.TxHash{background-color:#f7f1e6; border:solid 1px gray; font-family:sans-serif; background-color:#f7f1e6; }
 	.TxRes{font-family:sans-serif; background-color:#f7f1e6; padding: 15px; border:solid 1px gray; word-wrap: break-word;}
 	.qrdiv{border: 0px outset black; width: auto; height: auto; background-color:#ddddff; padding: 15px 15px 15px 15px; margin:0px auto; color:#502985;
 		 display: flex; flex-direction: row;}
 	.RPTxt{border: 0px outset black; width: auto; height: auto; background-color:#f7f1e6; padding: 15px 15px 15px 15px; margin:0px auto; color:#000000;
 		 display: flex; flex-direction: row; word-wrap: break-word; font-family:sans-serif;}
+	.warning{
+		padding: 20px;
+  		width:670px;
+  		height: auto;
+  		border:solid 2px red;
+  		z-index:1000;
+		top: 80; right: 0; bottom: 0; left: 0;
+		background-color:#f7f1e6;
+  		margin: auto auto auto 60px;
+		position: relative;
+		}
+	.darkpaper{
+		z-index:500;
+		background-color:#00000049;
+		width:110%;
+  		height:110%;
+		position: fixed;
+		top: -10px; left: -10px;
+	}
+	.Msgbox{
+		color: #000000;
+		font-family:sans-serif;
+		word-wrap: break-word;
+	}
 	</style>
   </head>
   
-  <body style="float: left;" onload="StartUp()">
+  <body style="float: left;">
+
+	<div id="DarkPaper" class="darkpaper">
+		<div id="AlertDIV" class="warning">
+			<span style="color: #900000;">&#9888; Message</span><br /><br />
+			<span id="ErrMsg" class="Msgbox"></span><br /><br />
+			<div style="width:100%; height: auto; text-align:center;">
+				<button onclick="document.getElementById('DarkPaper').style.display='none';" class="btn" >&nbsp;Close&nbsp;</button>
+			</div>
+		</div>
+	</div>
+	<div id="DPaper2" class="darkpaper">
+		<div id="ConfirmDIV" class="warning">
+			<span id="ConTit" style="color: #900000;"></span><br /><br />
+			<span id="ConMsg" class="Msgbox"></span><br /><br />
+			<div style="width:100%; height: auto; text-align:center;">
+				<button onclick="ConfirmChoice='1';" class="btn">&nbsp;OK&nbsp;</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<button onclick="ConfirmChoice='2';" class="btn" >&nbsp;Cancel&nbsp;</button>
+			</div>
+		</div>
+	</div>
 
 	<br />
     <div id="main" class="good">
@@ -577,7 +682,6 @@ may be caused by case-insensitive input.\n\n\Please recheck the address you ente
 		</div>
 	</div>
   </body>
-
 </html>
 
 
