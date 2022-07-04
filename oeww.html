@@ -10,7 +10,7 @@
  * jQuery is JS Foundation's project with the MIT license http://jquery.org/license/
  * 
 -->
-
+<!DOCTYPE html>
 <html>
   <head>
     <title>Overdoing ETH Warm Wallet</title>
@@ -102,13 +102,79 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 	const timeout = async ms => new Promise(res => setTimeout(res, ms));
 
 	window.addEventListener("load", function(){
+		ClearAll();
 		web3 = new Web3(Web3.currentProvider);
 		document.getElementById('web3v').innerHTML = web3.version;
-		assistant = 'https://overdoignism.github.io/Overdoing-ETH-Warm-Wallet/EWWA.html?'
-		ClearAll()
+		assistant = 'https://overdoignism.github.io/Overdoing-ETH-Warm-Wallet/EWWA.html?';
+		document.getElementById('ver').innerHTML = '0.91';
+		SetOption();
 	});
 
+	function SetOption(CopyCome) {
+
+		var obj=document.getElementById('CC_TYPE');
+
+		var StdOpt = 
+		["ETH,1,https://rpc.ankr.com/eth●ETH: Ethereum Mainnet (Ankr)",
+		"ETH,1,https://cloudflare-eth.com●ETH: Ethereum Mainnet (Cloudflare)",
+		"ETH,1,https://main-rpc.linkpool.io●ETH: Ethereum Mainnet (LinkPool)",
+		"AVAX,43114,https://rpc.ankr.com/avalanche●AVAX: Avalanche C-Chain (Ankr)",
+		"BNB,56,https://rpc.ankr.com/bsc●BNB: Binance Smart Chain Mainnet (Ankr)",
+		"CRO,25,https://evm.cronos.org●CRO: Cronos Mainnet",
+		"ETC,61,https://www.ethercluster.com/etc●ETC: Ethereum Classic Mainnet",
+		"FTM,250,https://rpc.ankr.com/fantom●FTM: Fantom Mainnet (Ankr)",
+		"HT,128,https://http-mainnet.hecochain.com●HT: Huobi ECO Chain Mainnet",
+		"KLAY,8217,https://public-node-api.klaytnapi.com/v1/cypress●KLAY: Klaytn Mainnet Cypress",
+		"MATIC,137,https://rpc.ankr.com/polygon●MATIC: Polygon Mainnet (Ankr)",
+		"OKT,66,https://exchainrpc.okex.org●OKT: OKXChain Mainnet (OKEX)",
+		"GOR,5,https://rpc.goerli.mudit.blog/●GOR: Gorli Ethereum Testnet"]
+
+		var IdxEnd = StdOpt.length - 1;
+		var Idx;
+		var Tmpvar1;
+		obj.options.length=0;
+
+		if (CopyCome){
+			obj.options.add(new Option("(Load from Tx4Sign)", CopyCome));
+		}
+
+		for (Idx=0; Idx<=IdxEnd; Idx++) {
+			Tmpvar1 = StdOpt[Idx].split("●");
+			obj.options.add(new Option(Tmpvar1[1],Tmpvar1[0]));
+		}
+		obj.selectedIndex = 0;
+	}
+
+	async function GetFromTXS() {
+
+		var Ctext = document.getElementById('TXSCode').value;
+		Ctext = decodeURIComponent(atob(Ctext)); //base64 looks good :P
+		var ThereIsError = false;
+
+		var WorkerVar = Ctext.split(";");
+		if (WorkerVar.length != 6) {
+			ThereIsError = true;
+		}
+		if (WorkerVar[0] != 'OEWW') {
+			ThereIsError = true;
+		}
+		if (ThereIsError) {
+			document.getElementById('DarkPaper').style.display="";
+			document.getElementById('ErrMsg').innerHTML = "TxSign code is invald or empty. Please check and try again.";
+			return;
+		}
+
+		SetOption(WorkerVar[1]);
+		document.getElementById('R_ADDR').value = WorkerVar[2];
+		document.getElementById('S_ETH').value = WorkerVar[3];
+		document.getElementById('S_NONC').value = WorkerVar[4];
+		document.getElementById('G_PRIC').value = WorkerVar[5];
+
+	}
+
 	function ClearAll() {
+		document.getElementById('DarkPaper').style.display='none';
+		document.getElementById('DPaper2').style.display='none';
 		document.getElementById('uname').value = '';
 		document.getElementById('S_PKEY').value = '';
 		document.getElementById('WORK').value = '';
@@ -123,12 +189,20 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 		document.getElementById('S_ETH').value = '0';
 		document.getElementById('G_PRIC').value = '0';
 		document.getElementById('MTR_SIGN').innerHTML = '';
+		document.getElementById('TXSCode').value = '';
 		document.getElementById('TxSigned2').style.display="none";
 		document.getElementById('Info02').style.display="none";
 		document.getElementById('BroadcastDiv2').style.display="none";
 		document.getElementById('DoItbtn').setAttribute("disabled","disabled");
-		document.getElementById('DarkPaper').style.display='none';
-		document.getElementById('DPaper2').style.display='none';
+	}
+
+	function ProcessAddr(TheAddr) {
+		var ReturnAddr = TheAddr.trim();
+		ReturnAddr = ReturnAddr.replaceAll(" ","");
+		if(ReturnAddr.slice(0,2).toLowerCase() != '0x'){
+			ReturnAddr = '0x' + ReturnAddr;
+		}
+		return ReturnAddr;
 	}
 
 	async function Copy2Clipboard(what2copy){
@@ -161,10 +235,11 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 		document.getElementById('WORK').value = '';
 		document.getElementById('S_ADDR').value = '';
 		document.getElementById('TH').innerHTML = '';
+		document.getElementById('TXSCode').value = '';
 		document.getElementById('MTR_SIGN').innerHTML = '';
+		document.getElementById('TxSigned2').style.display="none";
 		document.getElementById('GetInfo').setAttribute("disabled","disabled");
 		document.getElementById('Info02').style.display="none";
-
 
 		try {
 			Private_Key = document.getElementById('S_PKEY').value;
@@ -197,8 +272,8 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 
 			BlockHeight = await web3.eth.getBlock("pending");
 			fDate = new Date(Date.now());
-			DateString = fDate.getFullYear() + '/' + fDate.getMonth() + '/' + fDate.getDay() + ' '+fDate.getHours() + ':' + fDate.getMinutes()+ ':' + fDate.getSeconds();
-			document.getElementById('WORK').value = Worker2[0] + ' Block height: ' + BlockHeight.number + '  Access Time:' + DateString;
+			DateString = fDate.getFullYear() + '/' + (fDate.getMonth()+1) + '/' + fDate.getDate() + ' '+fDate.getHours() + ':' + fDate.getMinutes()+ ':' + fDate.getSeconds();
+			document.getElementById('WORK').value = Worker2[0] + ' Block height: ' + BlockHeight.number + '  Retrieve time:' + DateString;
 			
 			var Gas_Price;
 			Gas_Price = await web3.eth.getGasPrice();
@@ -236,7 +311,7 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 		var Receiver_Addr;
 		var The_Nonce = document.getElementById('S_NONC').value;
 		var TrueSendGas;
-		var LargeData = "Cryptocurrency: " + Worker2[0] + '   (ChainID: ' + Worker2[1]+')';
+		var LargeData = "Cryptocurrency: <span class='mCr'>" + Worker2[0] + '   (ChainID: ' + Worker2[1]+')</span>';
 		var checklist = "";
 		var NeedConfirm = false;
 
@@ -252,13 +327,7 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 
 		// Check Address
 		Receiver_Addr = document.getElementById('R_ADDR').value;
-		Receiver_Addr = Receiver_Addr.trim();
-		Receiver_Addr = Receiver_Addr.replaceAll(" ","");
-		var ValidChk = 0;
-		if(Receiver_Addr.slice(0,2).toLowerCase() != '0x'){
-			Receiver_Addr = '0x' + Receiver_Addr;
-			document.getElementById('R_ADDR').value = Receiver_Addr;
-		}
+		Receiver_Addr = ProcessAddr(Receiver_Addr);
 		try {
 			var NewR_Addr = Web3.utils.toChecksumAddress(Receiver_Addr)
 		} catch(exception) {
@@ -272,8 +341,9 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 			document.getElementById('DPaper2').style.display="";
 			document.getElementById('ConTit').innerHTML="&#9888; Confirm"
 			document.getElementById('ConMsg').innerHTML="Receiver's address has checksum failed.<br /><br />\
-			This is not necessarily an error,<br />may be caused by case-insensitive input.<br /><br />\
-			Please recheck the receiver&#39;s address you entered:<br /><br />" + Receiver_Addr + "<br /><br />Select &#39;OK&#39; to confirm."
+			This is not necessarily an error,<br />may be caused by case ignored when input.<br /><br />\
+			Please recheck the receiver&#39;s address,<br /> if it&#39;s correct (Checksum fixed):<br /><br />" + NewR_Addr + "<br />\
+			<br />Select &#39;OK&#39; to confirm."
 
 			ConfirmChoice = 0;
 			var next = true;
@@ -295,8 +365,8 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 			}
 		}
 
-		LargeData = LargeData + "<br/><br/>Sender's address:<br/>" + TheSender.address;
-		LargeData = LargeData + "<br/><br/>Receiver's address:<br/>" + Receiver_Addr;
+		LargeData = LargeData + "<br/><br/>Sender's address:<br/><span class='mCr'>" + TheSender.address + "</span>";
+		LargeData = LargeData + "<br/><br/>Receiver's address:<br/><span class='mCr'>" + Receiver_Addr + "</span>";
 		if (TheSender.address.toLowerCase() == Receiver_Addr.toLowerCase()) {
 			checklist = checklist + "● Sender's address is the same receiver's.<br /><br />";	
 			NeedConfirm = true;
@@ -308,7 +378,7 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 		SETHBN2Back = SETHBN2Back.mul(ETHtoWei);
 		SETHBN2Back = SETHBN2Back.div(new BN(GetMulWhat(SendETH)));
 		TrueSendETH = SETHBN2Back.toString();
-		LargeData = LargeData + "<br/><br/>How much currency to send: " + SendETH + ' ' + Worker2[0];
+		LargeData = LargeData + "<br/><br/>How much currency to send: <span class='mCr'>" + SendETH + ' ' + Worker2[0] + "</span>";
 		if (TrueSendETH == 0) {
 			checklist = checklist + "● The sending currency is zero.<br /><br />";
 			NeedConfirm = true;
@@ -330,7 +400,8 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 		var TrueGasTotal;
 		var GasTotBN2Back = GasBN2Back.mul(new BN('21000'));
 		TrueGasTotal = Cut_Zero(Get_from_Wei(GasTotBN2Back.toString(), 18));
-		LargeData = LargeData + "<br/><br/>Gas price: " + Gas_Price + " Gwei  <br/><br/>Total gas cost (x21000): " + TrueGasTotal + ' ' + Worker2[0];
+		LargeData = LargeData + "<br/><br/>Gas price: <span class='mCr'>" + Gas_Price + " Gwei</span>\
+		<br/><br/>Total gas cost (x21000): <span class='mCr'>" + TrueGasTotal + ' ' + Worker2[0] + "</span>";
 
 		// Check balance enough if balance exist 
 		var Sender_BalanceBN;
@@ -341,10 +412,10 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 			Sender_BalanceBN = new BN(Sender_Balance.toString());
 			Sender_BalanceBN = Sender_BalanceBN.sub(GasTotBN2Back);
 			Sender_BalanceBN = Sender_BalanceBN.sub(SETHBN2Back);
-			TmpStr = "<br/><br/>Estimated balance: " + Cut_Zero(Get_from_Wei(Sender_BalanceBN.toString(), 18)) + ' ' + Worker2[0] ;
+			TmpStr = "<br/><br/>Estimated balance: <span class='mCr'>" + Cut_Zero(Get_from_Wei(Sender_BalanceBN.toString(), 18)) + ' ' + Worker2[0] + "</span>";
 			if (Sender_BalanceBN.isNeg()) {
 				checklist = checklist + "● Sending currency + gas > balance. Broadcast could be fail.<br /><br />";
-				TmpStr = "<br/><br/>Estimated balance: N/A"
+				TmpStr = "<br/><br/>Estimated balance: <span class='mCr'>N/A</span>"
 				NeedConfirm = true;
 			}
 			LargeData = LargeData + TmpStr;
@@ -377,7 +448,7 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 			}
 		}
 
-		LargeData = LargeData + "<br/><br/>Nonce: " + The_Nonce;
+		LargeData = LargeData + "<br/><br/>Nonce: <span class='mCr'>" + The_Nonce +"</span>";
 		LargeData = LargeData + "<br/><br/>If you confirm it's correct, press &#39;Ok&#39;, else &#39;Cancel&#39;.";
 		
 		document.getElementById('DPaper2').style.display="";
@@ -456,7 +527,6 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 		document.getElementById('SIBR').innerHTML = TS_status;
 
 		try {
-			
 			document.getElementById('DoItbtn').setAttribute("disabled","disabled");
 			document.getElementById('BroadcastDiv2').style.display="";
 
@@ -472,7 +542,7 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 				TS_status = TS_status + "<br /><br />Index in Block: " + getTransactionReceipt.transactionIndex;
 				TS_status = TS_status + "<br /><br />This transaction is already on the chain.<br /><br />Attention: The signed transaction data is not reusable.";
 			} else { 
-				TS_status = "Reverted.<br /><br />"; //" Recheck the filled data, and remake an new transaction.";
+				TS_status = "Reverted.<br /><br />";
 				TS_status = TS_status + getRevertReason(getTransactionReceipt.transactionHash);
 				document.getElementById('DoItbtn').removeAttribute("disabled");
 			};
@@ -547,52 +617,57 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 	
 </script>
 	<style>
-	body, button, input, select, textarea{font-family: serif; font-size: 22px;}
+	body, button, input, select, textarea{font-family: sans-serif; font-size: 22px;}
 	.btn{font-family: serif; font-size: 26px}
-	.TitStr{font-size: 30px}
-	.good{border: 1px outset black; width:780px; height: auto; background-color:#eeeeff; padding: 0 15px 15px 15px; margin:0px auto;}
-	.Declare{border:1px rgb(255, 255, 255); width:750px; height:auto; background-color:#e8daff; 
+	.TitStr{font-size: 30px; font-family: serif;}
+	.good{border: 1px outset black; width:780px; height: auto; background-color:#eeeeff; padding: 0 15px 15px 15px; margin:0px auto; border-radius: 15px;}
+	.Declare{width:750px; height:auto; background-color:#e8daff; border-radius: 15px;
 		padding: 0 15px 15px 15px; margin:0px auto; line-height:1; font-family:sans-serif; font-size: 16px;}
-	.good2{border: 1px  rgb(255, 255, 255); width:750px; height: auto; background-color:#bdd2f3; padding: 0 15px 25px 15px; margin:0px auto;}
-	.cool1{border: 1px  rgb(255, 255, 255); width:720px; height: auto; background-color:#f0e1cb; padding: 0 15px 25px 15px; margin:0px auto;}
-	.cool2{border: 1px  rgb(255, 255, 255); width:720px; height: auto; background-color:#f0e1cb; padding: 15px 15px 15px 15px; margin:0px auto;}
-	.ReadOnlyInput{font-family:sans-serif; background-color:#f7f1e6; border:solid 1px gray; width:670px;}
-	.InputTxt{font-family:sans-serif; background-color:#ffffff; border:solid 1px gray; width:670px;}
+	.good2{width:750px; height: auto; background-color:#bdd2f3; padding: 0 15px 30px 15px; margin:0px auto; border-radius: 15px}
+	.cool1{width:720px; height: auto; background-color:#f0e1cb; padding: 0 15px 25px 15px; margin:0px auto; border-radius: 15px;}
+	.cool2{width:720px; height: auto; background-color:#f0e1cb; padding: 15px 15px 15px 15px; margin:0px auto; border-radius: 15px;}
+	.cool6{width:720px; height: auto; background-color:#fffdd9; padding: 15px 15px 15px 15px; margin:0px auto; border-radius: 15px;}
+	.cool3{width:720px; height: auto; background-color:#f0cdcb; 
+		padding: 15px 15px 15px 15px; margin:0px auto; border-radius: 15px; text-align: center; }
+	.ReadOnlyInput{font-family:sans-serif; background-color:#f7f1e6; border:solid 1px gray;width: 100%; box-sizing: border-box; border-radius: 5px; letter-spacing: 2.5px;}
+	.InputTxt{font-family:sans-serif; background-color:#ffffff; border:solid 1px gray; width: 100%; box-sizing: border-box; border-radius: 5px; letter-spacing: 2.5px;}
 	.InputTxt:focus {background-color: #daffe5; outline: none;}
 	.TxData{font-family:sans-serif; font-size: 20px; padding: 5px; border:solid 1px gray; background-color:#f7f1e6; resize: none;}
 	.TxRes{font-family:sans-serif; background-color:#f7f1e6; padding: 15px; border:solid 1px gray; word-wrap: break-word;}
 	.qrdiv{border: 0px outset black; width: auto; height: auto; background-color:#ddddff; padding: 15px 15px 15px 15px; margin:0px auto; color:#502985;
-		 display: flex; flex-direction: row;}
+		 display: flex; flex-direction: row; border-radius: 15px;}
 	.RPTxt{border: 0px outset black; width: auto; height: auto; background-color:#f7f1e6; padding: 15px 15px 15px 15px; margin:0px auto; color:#000000;
-		 display: flex; flex-direction: row; word-wrap: break-word; font-family:sans-serif;}
+		 display: flex; flex-direction: row; word-wrap: break-word; font-family:sans-serif; border-radius: 15px;}
+	.darkpaper{
+		z-index:500;
+		background-color:#00000049;
+		position: fixed;
+  		top:0;
+  		left:0;
+  		width:100%;
+		height:100%;
+	}
 	.warning{
 		padding: 20px;
   		width:670px;
   		height: auto;
   		border:solid 2px red;
-  		z-index:1000;
-		top: 80; right: 0; bottom: 0; left: 0;
 		background-color:#f7f1e6;
-  		margin: auto auto auto 60px;
+  		margin: auto;
 		position: relative;
-		}
-	.darkpaper{
-		z-index:500;
-		background-color:#00000049;
-		width:110%;
-  		height:110%;
-		position: fixed;
-		top: -10px; left: -10px;
+		top: 3%;
+		border-radius: 15px;
 	}
 	.Msgbox{
 		color: #000000;
 		font-family:sans-serif;
 		word-wrap: break-word;
 	}
+	.mCr{color:#3f47c0; letter-spacing: 1.8px;}
 	</style>
   </head>
   
-  <body style="float: left;">
+  <body>
 	<div id="DarkPaper" class="darkpaper">
 		<div id="AlertDIV" class="warning">
 			<span style="color: #900000;">&#9888; Message</span><br /><br />
@@ -616,8 +691,8 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 	<br />
     <div id="main" class="good">
 		<br />
-		<span style="font-size: 32px">Overdoing ETH Warm Wallet v0.8</span><br />
-		<span style="font-size: 22px">Using <a href="https://github.com/ChainSafe/web3.js">web3.js</a> API. Detected ver: <span id='web3v'></span></span><br /><br />
+		<span style="font-size: 32px; font-family: serif;">Overdoing ETH Warm Wallet v<span id='ver'></span></span><br />
+		<span style="font-size: 20px;">Using <a href="https://github.com/ChainSafe/web3.js">web3.js</a> API Ver: <span id='web3v'></span></span><br /><br />
 		<div id="block1" class="Declare">
 			<br />
 			<b>* Declare *</b><br /><br />
@@ -634,62 +709,60 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 		<br />
 		<div id="block2" class="good2">
 			<br />
-			<span class="TitStr">Initial</span><br /><br />
-			Select cryptocurrency, network, and RPC server:<br />
-			<select id="CC_TYPE" class="InputTxt">
-			<option selected="selected" value="ETH,1,https://rpc.ankr.com/eth">ETH: Ethereum Mainnet (Ankr)</option>
-			<option value="ETH,1,https://cloudflare-eth.com">ETH: Ethereum Mainnet (Cloudflare)</option>
-			<option value="ETH,1,https://main-rpc.linkpool.io">ETH: Ethereum Mainnet (LinkPool)</option>
-			<option value="AVAX,43114,https://rpc.ankr.com/avalanche">AVAX: Avalanche C-Chain (Ankr)</option>
-			<option value="BNB,56,https://rpc.ankr.com/bsc">BNB: Binance Smart Chain Mainnet (Ankr)</option>
-			<option value="CRO,25,https://evm.cronos.org">CRO: Cronos Mainnet</option>
-			<option value="ETC,61,https://www.ethercluster.com/etc">ETC: Ethereum Classic Mainnet</option>
-			<option value="FTM,250,https://rpc.ankr.com/fantom">FTM: Fantom Mainnet (Ankr)</option>
-			<option value="HT,128,https://http-mainnet.hecochain.com">HT: Huobi ECO Chain Mainnet</option>
-			<option value="KLAY,8217,https://public-node-api.klaytnapi.com/v1/cypress">KLAY: Klaytn Mainnet Cypress</option>
-			<option value="MATIC,137,https://rpc.ankr.com/polygon">MATIC: Polygon Mainnet (Ankr)</option>
-			<option value="OKT,66,https://exchainrpc.okex.org">OKT: OKXChain Mainnet (OKEX)</option>
-			<option value="GOR,5,https://rpc.goerli.mudit.blog/">GOR: Gorli Ethereum Testnet</option>
-			</select><br /><br />
-	
-		<form method="POST" action="">
-			Transaction memo (Optional) <br />
-			<input maxlength="69" name="uname" id="uname" type="text" class="InputTxt" style="width: 450px;"/> &nbsp;
-			<input type="submit" class="btn" value="&nbsp;Save (Reload)&nbsp;" title="For browser memory private key"><br /><br />
-			Sender&#39;s private key <br />
-			<input maxlength="69" name="S_PKEY" id="S_PKEY" required="required" type="password" class="InputTxt" style="width: 100%; box-sizing: border-box;"/><br />
-		</form>
-
-			<div id="Info01" class="cool2">
-				<span class="TitStr">Information</span> &nbsp; 
-				<input type="button" onclick="GetInfo()" class="btn" value="&nbsp;Retrieve&nbsp;" title="Internet connection needed" id="GetInfo">
+			<span class="TitStr">Initial</span><br /><br />	
+			<form method="POST" action="">
+				Transaction memo ( Optional ) <br />
+				<input maxlength="69" name="uname" id="uname" type="text" class="InputTxt" style="width: 450px;"/> &nbsp;
+				<input type="submit" class="btn" value="&nbsp;Save (Reload)&nbsp;" title="For browser memory private key"><br /><br />
+				Sender&#39;s private key <br />
+				<input maxlength="69" name="S_PKEY" id="S_PKEY" required="required" type="password" class="InputTxt"/><br /><br />
+				Select currency type &amp; RPC server<br />
+				<select id="CC_TYPE" class="InputTxt">
+				</select><br /><br />
+			</form>
+			<br />
+			<div id="TxCodeDIV" class="cool3">
+				<span class="TitStr">Tx4Sign </span>paste here&nbsp;&nbsp;&#129034;&nbsp;&nbsp;
+				<input id="TXSCode" type="text" class="InputTxt" style="width: 30%;"/>&nbsp;&nbsp;&nbsp;
+				<input type="button" onclick="GetFromTXS();" class="btn" value="&nbsp;Load&nbsp;">
+				<br />
 			</div>
-			<div id="Info02" class="cool1">
-				Retrieved block height and time<br />
-				<input readonly id="WORK" type="text" class="ReadOnlyInput"/><br /><br />
-
-				Sender&#39;s address<br />
-				<input readonly id="S_ADDR" type="text" class="ReadOnlyInput"/><br /><br />
-
-				Sender&#39;s balance<br />
-				<input readonly id="BALA" type="text" class="ReadOnlyInput"/><input readonly id="TrueBALA" type="hidden"><br /><br />
-	
-				Sender&#39;s nonce value<br />
-				<input readonly id="NONC" type="text" class="ReadOnlyInput"/><br /><br />
-	
-				Current gas per price (in Gwei)<br />
-				<input readonly id="GASP" type="text" class="ReadOnlyInput"/><br /><br />
-	
-				<span style="color:#976f34;">Current base gas per price (Need EIP-1559) (in Gwei)</span><br />
-				<input readonly id="BGASP" type="text" class="ReadOnlyInput" title="Current for reference only" style="color:#976f34;" /><br />
+			<div style="height:10px"></div>
+			<div style="text-align: center; background-color:#eeeeff; border-radius: 15px; padding: 10px;" >
+				Please select a method &#129033; &#129035;, or enter all data by manually. 
 			</div>
-		</div>
-		<br />
-		<div id="block4" class="good2">
-			<br /><span class="TitStr">Fill transaction data</span><br /><br />
+			<div style="height:10px"></div>
+			<div id="Info01" class="cool3">
+				<div style="text-align: center;">
+					<span class="TitStr">Information</span> &nbsp; 
+					<input type="button" onclick="GetInfo()" class="btn" value="&nbsp;Retrieve&nbsp;" id="GetInfo">
+					&nbsp;&nbsp;&#129032;&nbsp;&nbsp;Need internet connected
+				</div>
+				<div id="Info02">
+					<br />
+					Retrieved block height and retrieve time<br />
+					<input readonly id="WORK" type="text" class="ReadOnlyInput" style="letter-spacing: 1.5px;"/><br /><br />
 
-			Receiver&#39;s address (0x can be omitted, case match is better)<br />
-			<input id="R_ADDR" type="text" class="InputTxt" style="font-family: Courier New; font-weight: bold;"/><br /><br />
+					Sender&#39;s address<br />
+					<input readonly id="S_ADDR" type="text" class="ReadOnlyInput"/><br /><br />
+
+					Sender&#39;s balance<br />
+					<input readonly id="BALA" type="text" class="ReadOnlyInput"/><input readonly id="TrueBALA" type="hidden"><br /><br />
+				
+					Sender&#39;s nonce<br />
+					<input readonly id="NONC" type="text" class="ReadOnlyInput"/><br /><br />
+				
+					Current gas per price (in Gwei)<br />
+					<input readonly id="GASP" type="text" class="ReadOnlyInput"/><br /><br />
+				
+					<span style="color:#976f34;">Current base gas per price (Need EIP-1559) (in Gwei)</span><br />
+					<input readonly id="BGASP" type="text" class="ReadOnlyInput" title="Current for reference only" style="color:#976f34;" /><br />
+				</div>
+			</div>
+			<br />
+			<span class="TitStr">Fill transaction data</span><br /><br />
+			Receiver&#39;s address ( Case match is better )<br />
+			<input id="R_ADDR" type="text" class="InputTxt"/><br /><br />
 			
 			How much cryptocurrency to send<br />
 			<input id="S_ETH" type="number" min="0" value="0" step="any" class="InputTxt"/><br /><br />
@@ -701,43 +774,47 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 			<input id="G_PRIC" type="number" min="0" value="0" step="any" class="InputTxt"/><br /><br />
 			
 			<div id="TxSigned1" class="cool2">
-				<span class="TitStr">Signed transaction</span> &nbsp; 
-				<input type="button" onclick="MakeTransaction()" class="btn" value="&nbsp;Make&nbsp;" title="">
-			</div>
-			<div id="TxSigned2" class="cool1">
-				The main RLP signature (For node broadcast)<br />
-
-				<div id="TX01" class="RPTxt">
-					<div id="MTR_SIGN" style="margin: 10px; width: 75%;"><br />N/A<br /></div>
-					<div id="COPYBT1" style="margin: 10px; width: 25%; display: flex; align-items: center;">
-						<input type="button" onclick="Copy2Clipboard('MTR_SIGN')" id="Copy2clipMS" class="btn" value="&nbsp;Copy&nbsp;" />
+				<div style="text-align: center;">
+					<span class="TitStr">Signed transaction</span> &nbsp; 
+					<input type="button" onclick="MakeTransaction()" class="btn" value="&nbsp;Make&nbsp;" title="">
+				</div>
+				<div id="TxSigned2">
+					<br />The main RLP signature ( For node broadcast )<br />
+					<div id="TX01" class="RPTxt">
+						<div id="MTR_SIGN" style="margin: 10px; width: 75%;"><br />N/A<br /></div>
+						<div id="COPYBT1" style="margin: 10px; width: 25%; display: flex; align-items: center;">
+							<input type="button" onclick="Copy2Clipboard('MTR_SIGN')" id="Copy2clipMS" class="btn" value="&nbsp;Copy&nbsp;" />
+						</div>
 					</div>
-				</div>
-				<br />
-				<div id="QrSQU" class="qrdiv">
-					<div id="QrcodeDIV" style="margin: 10px; width: 50%;">QRcode:<br /><br />N/A</div>
-					<div id="QrcodeDIV2" style="margin: 10px; width: 50%;">QRcode with assistant link:<br /><br />N/A</div>
-				</div>
-				<br />Transaction Hash (For transaction tracing)<br />
-				<div id="TX02" class="RPTxt">
-					<div id="TH" style="margin: 10px; width: 75%;"><br />N/A<br /></div>
-					<div id="COPYBT2" style="margin: 10px; width: 25%; display: flex; align-items: center;">
-						<input type="button" onclick="Copy2Clipboard('TH')" id="Copy2clipTH" class="btn" value="&nbsp;Copy&nbsp;" />
+					<br />
+					<div id="QrSQU" class="qrdiv">
+						<div id="QrcodeDIV" style="margin: 10px; width: 50%;">QRcode:<br /><br />N/A</div>
+						<div id="QrcodeDIV2" style="margin: 10px; width: 50%;">QRcode with assistant link:<br /><br />N/A</div>
 					</div>
-				</div>
-				<br />
-				<div id="QrTx" class="qrdiv">
-					<div id="QrcodeTx" style="margin: 10px; width: 50%;">QRcode:<br /><br />N/A</div>
+					<br />Transaction Hash ( For transaction tracing )<br />
+					<div id="TX02" class="RPTxt">
+						<div id="TH" style="margin: 10px; width: 75%;"><br />N/A<br /></div>
+						<div id="COPYBT2" style="margin: 10px; width: 25%; display: flex; align-items: center;">
+							<input type="button" onclick="Copy2Clipboard('TH')" id="Copy2clipTH" class="btn" value="&nbsp;Copy&nbsp;" />
+						</div>
+					</div>
+					<br />
+					<div id="QrTx" class="qrdiv">
+						<div id="QrcodeTx" style="margin: 10px; width: 50%;">QRcode:<br /><br />N/A</div>
+					</div>
 				</div>
 			</div>
 			<br />
 			<div id="BroadcastDiv1" class="cool2">
-				<span class="TitStr">Broadcast</span> &nbsp; 
-				<input type="button" onclick="GoBroadcast()" id="DoItbtn" class="btn" value="&nbsp;Do it&nbsp;" title="Internet connection needed. Make signed transaction first." disabled="disabled" />
-			</div>
-			<div id="BroadcastDiv2" class="cool1">
-				Broadcast result<br />
-				<div id="SIBR" class="TxRes">N/A</div>	
+				<div style="text-align: center;">
+					<span class="TitStr">Broadcast</span> &nbsp; 
+					<input type="button" onclick="GoBroadcast()" id="DoItbtn" class="btn" value="&nbsp;Do it&nbsp;" title="Internet connection needed. Make signed transaction first." disabled="disabled" />
+					&nbsp;&nbsp;&#129032;&nbsp;&nbsp;Need internet connected
+				</div>
+				<div id="BroadcastDiv2">
+					<br />Broadcast result<br />
+					<div id="SIBR" class="RPTxt">N/A</div>	
+				</div>
 			</div>
 		</div>
 		<br />
@@ -749,6 +826,5 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 	</div>
   </body>
 </html>
-
 
 
