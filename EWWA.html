@@ -1,7 +1,7 @@
 <!--
  * ETH Warm Wallet assistant
  * It's a part of Overdoing ETH Warm Wallet.
- * ver 0.92
+ * ver 0.93
  * LGPL v3 License
  * The author does not have any warranty or responsibility.
  * 
@@ -40,7 +40,7 @@
 		document.getElementById('web3v').innerHTML = web3.version;
 		assistant = 'https://overdoignism.github.io/Overdoing-ETH-Warm-Wallet/EWWA.html?'
 		SetOptionEZ();
-		document.getElementById('ver').innerHTML = '0.92';
+		document.getElementById('ver').innerHTML = '0.93';
 	});
 
 	function SetOptionEZ() {
@@ -108,14 +108,19 @@
 		var txt = document.getElementById(what2copy).innerHTML;
 		if (txt != ''){
 			await navigator.clipboard.writeText(txt);
+			document.getElementById('DPaper3').style.display='';
 		}
 	}
 
 	async function CopyAddr(){
 		await navigator.clipboard.writeText('0x7cE987d1C417DBb86CfE6f9Ac6cfEDF7554853AF');
+		document.getElementById('DPaper3').style.display='';
 	}
 
 	function ClearAll() {
+		document.getElementById('DarkPaper').style.display='none';
+		document.getElementById('DPaper2').style.display='none';
+		document.getElementById('DPaper3').style.display='none';
 		document.getElementById('WORK').value = '';
 		document.getElementById('BALA').value = '';
 		document.getElementById('TrueBALA').value = '';
@@ -127,9 +132,8 @@
 		document.getElementById('R_ADDR').value = '';
 		document.getElementById('BGASP').value = '';
 		document.getElementById('ADDR').value = '';
-		document.getElementById('DarkPaper').style.display='none';
-		document.getElementById('DPaper2').style.display='none';
 		document.getElementById('ShowQr').style.display='none';
+		document.getElementById('Copy2clipTX2').setAttribute("disabled","disabled"); 
 	}
 
 	function ProcessAddr(TheAddr) {
@@ -263,8 +267,8 @@
 		var NeedConfirm = false;
 
 		// Check if Retrieved
-		if(document.getElementById('WORK').value == '') {
-			checklist = checklist + "● &#39;Retrieve&#39; has not been performed yet.<br /><br />";
+		if(!Number.isInteger(document.getElementById('NONC').value)) {
+			checklist = checklist + "● &#39;Retrieve&#39; with sender&#39;s address has not been performed yet.<br /><br />";
 			NeedConfirm = true;
 		}
 
@@ -334,7 +338,7 @@
 		var The_Nonce = document.getElementById('S_NONC').value;
 		if (The_Nonce == '') {
 			document.getElementById('DarkPaper').style.display="";
-			document.getElementById('ErrMsg').innerHTML = "The Sender&#39;s nonce must be filled with an appropriate value.<br /><br />Recommend you use &#39;Retrieve&#39; to get it.";
+			document.getElementById('ErrMsg').innerHTML = "The Sender&#39;s nonce must be filled with an appropriate value.<br /><br />Recommend you use &#39;Retrieve&#39; with sender&#39;s address.";
 			return;
 		}
 		BigOne = BigOne + The_Nonce + ";";
@@ -466,6 +470,7 @@
 
 			document.getElementById('SIBR2').innerHTML = TS_status;
 			document.getElementById('TH2').innerHTML = getTransactionReceipt.transactionHash;
+			document.getElementById('Copy2clipTX').removeAttribute("disabled");
 
 		} catch (exception) {
 			document.getElementById('SIBR2').innerHTML = exception + "<br /><br />Please verify cryptocurrency / RPC server is correct.";
@@ -608,6 +613,14 @@
 			<div style="width:100%; height: auto; text-align:center;">
 				<button onclick="ConfirmChoice='1';" class="btn">&nbsp;OK&nbsp;</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<button onclick="ConfirmChoice='2';" class="btn" >&nbsp;Cancel&nbsp;</button>
+			</div>
+		</div>
+	</div>
+	<div id="DPaper3" class="darkpaper">
+		<div id="CopyClp" class="warning" style="border:solid 2px blue; width:200px; top:150px;">
+			<div style="width:100%; height: auto; text-align:center;">
+				<span id="Copy1" style="color: #001690; text-align: center;">Copied.</span><br /><br />
+				<button onclick="document.getElementById('DPaper3').style.display='none';" class="btn" >&nbsp;OK&nbsp;</button>
 			</div>
 		</div>
 	</div>
