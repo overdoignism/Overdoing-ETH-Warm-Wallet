@@ -105,7 +105,7 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 		ClearAll();
 		web3 = new Web3(Web3.currentProvider);
 		document.getElementById('web3v').innerHTML = web3.version;
-		assistant = 'https://overdoignism.github.io/Overdoing-ETH-Warm-Wallet/EWWA.html?';
+		assistant = 'https://overdoignism.github.io/Overdoing-ETH-Warm-Wallet/EWWA_zhtw.html?';
 		document.getElementById('ver').innerHTML = '0.94';
 		SetOption();
 	});
@@ -115,19 +115,19 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 		var obj=document.getElementById('CC_TYPE');
 
 		var StdOpt = 
-		["ETH,1,https://rpc.ankr.com/eth●ETH: Ethereum Mainnet (Ankr)",
-		"ETH,1,https://cloudflare-eth.com●ETH: Ethereum Mainnet (Cloudflare)",
-		"ETH,1,https://main-rpc.linkpool.io●ETH: Ethereum Mainnet (LinkPool)",
+		["ETH,1,https://rpc.ankr.com/eth●ETH: Ethereum 主網 (Ankr)",
+		"ETH,1,https://cloudflare-eth.com●ETH: Ethereum 主網 (Cloudflare)",
+		"ETH,1,https://main-rpc.linkpool.io●ETH: Ethereum 主網 (LinkPool)",
 		"AVAX,43114,https://rpc.ankr.com/avalanche●AVAX: Avalanche C-Chain (Ankr)",
-		"BNB,56,https://rpc.ankr.com/bsc●BNB: Binance Smart Chain Mainnet (Ankr)",
-		"CRO,25,https://evm.cronos.org●CRO: Cronos Mainnet",
-		"ETC,61,https://www.ethercluster.com/etc●ETC: Ethereum Classic Mainnet",
-		"FTM,250,https://rpc.ankr.com/fantom●FTM: Fantom Mainnet (Ankr)",
-		"HT,128,https://http-mainnet.hecochain.com●HT: Huobi ECO Chain Mainnet",
-		"KLAY,8217,https://public-node-api.klaytnapi.com/v1/cypress●KLAY: Klaytn Mainnet Cypress",
-		"MATIC,137,https://rpc.ankr.com/polygon●MATIC: Polygon Mainnet (Ankr)",
-		"OKT,66,https://exchainrpc.okex.org●OKT: OKXChain Mainnet (OKEX)",
-		"GOR,5,https://rpc.goerli.mudit.blog/●GOR: Gorli Ethereum Testnet"]
+		"BNB,56,https://rpc.ankr.com/bsc●BNB: Binance Smart Chain 主網 (Ankr)",
+		"CRO,25,https://evm.cronos.org●CRO: Cronos 主網",
+		"ETC,61,https://www.ethercluster.com/etc●ETC: Ethereum Classic 主網",
+		"FTM,250,https://rpc.ankr.com/fantom●FTM: Fantom 主網 (Ankr)",
+		"HT,128,https://http-mainnet.hecochain.com●HT: Huobi ECO Chain 主網",
+		"KLAY,8217,https://public-node-api.klaytnapi.com/v1/cypress●KLAY: Klaytn 主網 Cypress",
+		"MATIC,137,https://rpc.ankr.com/polygon●MATIC: Polygon 主網 (Ankr)",
+		"OKT,66,https://exchainrpc.okex.org●OKT: OKXChain 主網 (OKEX)",
+		"GOR,5,https://rpc.goerli.mudit.blog/●GOR: Gorli Ethereum 測試網"]
 
 		var IdxEnd = StdOpt.length - 1;
 		var Idx;
@@ -135,7 +135,7 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 		obj.options.length=0;
 
 		if (CopyCome){
-			obj.options.add(new Option("(Load from Tx4Sign)", CopyCome));
+			obj.options.add(new Option("(從 Tx4Sign 載入)", CopyCome));
 		}
 
 		for (Idx=0; Idx<=IdxEnd; Idx++) {
@@ -160,7 +160,7 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 		}
 		if (ThereIsError) {
 			document.getElementById('DarkPaper').style.display="";
-			document.getElementById('ErrMsg').innerHTML = "Tx4Sign code is invald or empty. Please check and try again.";
+			document.getElementById('ErrMsg').innerHTML = "Tx4Sign 碼是空的或無效。請檢查後重試。";
 			return;
 		}
 
@@ -249,7 +249,7 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 			TheSender = web3.eth.accounts.privateKeyToAccount(Private_Key);
 		} catch {
 			document.getElementById('DarkPaper').style.display="";
-			document.getElementById('ErrMsg').innerHTML = "Private Key is empty or error. Please check and try again.";
+			document.getElementById('ErrMsg').innerHTML = "私鑰是空的、或是有錯誤。請檢查後重試。";
 			document.getElementById('GetInfo').removeAttribute("disabled");
 			return;
 		}
@@ -276,7 +276,7 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 			BlockHeight = await web3.eth.getBlock("pending");
 			fDate = new Date(Date.now());
 			DateString = fDate.getFullYear() + '/' + (fDate.getMonth()+1) + '/' + fDate.getDate() + ' '+fDate.getHours() + ':' + fDate.getMinutes()+ ':' + fDate.getSeconds();
-			document.getElementById('WORK').value = Worker2[0] + ' Block height: ' + BlockHeight.number + '  Retrieve time:' + DateString;
+			document.getElementById('WORK').value = Worker2[0] + ' 塊高度: ' + BlockHeight.number + '  取得時間:' + DateString;
 			
 			var Gas_Price;
 			Gas_Price = await web3.eth.getGasPrice();
@@ -287,12 +287,12 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 			if (BlockHeight.baseFeePerGas){
 				document.getElementById('BGASP').value = Cut_Zero(Get_from_Wei(BlockHeight.baseFeePerGas.toString(),9).toString());
 			} else {
-				document.getElementById('BGASP').value = '(Not support EIP-1559)';
+				document.getElementById('BGASP').value = '(不支援 EIP-1559)';
 			}
 
 		} catch (exception) {
 			document.getElementById('DarkPaper').style.display="";
-			document.getElementById('ErrMsg').innerHTML = exception + "<br/><br/>Please check if internet connected, and RPC server is alive.";
+			document.getElementById('ErrMsg').innerHTML = exception + "<br/><br/>請檢查網路是否已連通，RPC伺服器是否正常運作。";
 		}
 
 		document.getElementById('GetInfo').removeAttribute("disabled");
@@ -314,7 +314,7 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 		var Receiver_Addr;
 		var The_Nonce = document.getElementById('S_NONC').value;
 		var TrueSendGas;
-		var LargeData = "Cryptocurrency: <span class='mCr'>" + Worker2[0] + '   (ChainID: ' + Worker2[1]+')</span>';
+		var LargeData = "加密貨幣: <span class='mCr'>" + Worker2[0] + '   (ChainID: ' + Worker2[1]+')</span>';
 		var checklist = "";
 		var NeedConfirm = false;
 
@@ -324,7 +324,7 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 			TheSender = web3.eth.accounts.privateKeyToAccount(Private_Key);
 		} catch {
 			document.getElementById('DarkPaper').style.display="";
-			document.getElementById('ErrMsg').innerHTML = 'Private Key empty or incorrect. Please check and try again.';
+			document.getElementById('ErrMsg').innerHTML = '私鑰是空的、或是有錯誤。請檢查後重試。';
 			return;
 		}
 
@@ -335,18 +335,18 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 			var NewR_Addr = Web3.utils.toChecksumAddress(Receiver_Addr)
 		} catch(exception) {
 			document.getElementById('DarkPaper').style.display="";
-			document.getElementById('ErrMsg').innerHTML = "Receiver's address is invald or empty. Please check and try again.";
+			document.getElementById('ErrMsg').innerHTML = "接收者的地址為空、或是無效。請檢查後重試。";
 			return;
 		}
 
 		if(NewR_Addr != Receiver_Addr) {
 
 			document.getElementById('DPaper2').style.display="";
-			document.getElementById('ConTit').innerHTML="&#9888; Confirm"
-			document.getElementById('ConMsg').innerHTML="Receiver's address has checksum failed.<br /><br />\
-			This is not necessarily an error,<br />may be caused by case ignored when input.<br /><br />\
-			Please recheck the receiver&#39;s address,<br /> if it&#39;s correct (Checksum fixed):<br /><br />" + NewR_Addr + "<br />\
-			<br />Select &#39;OK&#39; to confirm."
+			document.getElementById('ConTit').innerHTML="&#9888; 確認"
+			document.getElementById('ConMsg').innerHTML="接收者地址的檢核碼檢查失敗。<br /><br />\
+			這不一定是真的發生錯誤，<br />可能是因為輸入時忽略了字母大小寫所致。<br /><br />\
+			請重新檢查接收者的地址，<br />如果檢核碼正確應該如此:<br /><br />" + NewR_Addr + "<br />\
+			<br />選擇 &#39;確認&#39; 代表已確認。"
 
 			ConfirmChoice = 0;
 			var next = true;
@@ -368,10 +368,10 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 			}
 		}
 
-		LargeData = LargeData + "<br/><br/>Sender's address:<br/><span class='mCr'>" + TheSender.address + "</span>";
-		LargeData = LargeData + "<br/><br/>Receiver's address:<br/><span class='mCr'>" + Receiver_Addr + "</span>";
+		LargeData = LargeData + "<br/><br/>發送者的地址:<br/><span class='mCr'>" + TheSender.address + "</span>";
+		LargeData = LargeData + "<br/><br/>接收者的地址:<br/><span class='mCr'>" + Receiver_Addr + "</span>";
 		if (TheSender.address.toLowerCase() == Receiver_Addr.toLowerCase()) {
-			checklist = checklist + "● Sender&#39;s address is the same receiver&#39;s.<br /><br />";	
+			checklist = checklist + "● 發送者與接收者兩者的地址相同。<br /><br />";	
 			NeedConfirm = true;
 		}
 
@@ -381,9 +381,9 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 		SETHBN2Back = SETHBN2Back.mul(ETHtoWei);
 		SETHBN2Back = SETHBN2Back.div(new BN(GetMulWhat(SendETH)));
 		TrueSendETH = SETHBN2Back.toString();
-		LargeData = LargeData + "<br/><br/>How much currency to send: <span class='mCr'>" + SendETH + ' ' + Worker2[0] + "</span>";
+		LargeData = LargeData + "<br/><br/>要送出多少幣: <span class='mCr'>" + SendETH + ' ' + Worker2[0] + "</span>";
 		if (TrueSendETH == 0) {
-			checklist = checklist + "● The sending currency is zero.<br /><br />";
+			checklist = checklist + "● 送出的幣值為零。<br /><br />";
 			NeedConfirm = true;
 		}
 		
@@ -397,14 +397,14 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 			TrueSendGas = GasBN2Back.toString();
 		} else {
 			document.getElementById('DarkPaper').style.display="";
-			document.getElementById('ErrMsg').innerHTML = 'The Gas price must be > 0 , please correct it.';
+			document.getElementById('ErrMsg').innerHTML = 'Gas 費用必須 > 0 ，請修正。';
 			return;
 		}
 		var TrueGasTotal;
 		var GasTotBN2Back = GasBN2Back.mul(new BN('21000'));
 		TrueGasTotal = Cut_Zero(Get_from_Wei(GasTotBN2Back.toString(), 18));
-		LargeData = LargeData + "<br/><br/>Gas price: <span class='mCr'>" + Gas_Price + " Gwei</span><br/><br/>" 
-		LargeData = LargeData +	"Total gas cost (x21000): <span class='mCr'>" + TrueGasTotal + ' ' + Worker2[0] + "</span>";
+		LargeData = LargeData + "<br/><br/>Gas 價格: <span class='mCr'>" + Gas_Price + " Gwei</span><br/><br/>" 
+		LargeData = LargeData +	"Gas 總花費 (x21000): <span class='mCr'>" + TrueGasTotal + ' ' + Worker2[0] + "</span>";
 
 		// Check balance enough if balance exist 
 		var Sender_BalanceBN;
@@ -415,10 +415,10 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 			Sender_BalanceBN = new BN(Sender_Balance.toString());
 			Sender_BalanceBN = Sender_BalanceBN.sub(GasTotBN2Back);
 			Sender_BalanceBN = Sender_BalanceBN.sub(SETHBN2Back);
-			TmpStr = "<br/><br/>Estimated balance: <span class='mCr'>" + Cut_Zero(Get_from_Wei(Sender_BalanceBN.toString(), 18)) + ' ' + Worker2[0] + "</span>";
+			TmpStr = "<br/><br/>預計餘額: <span class='mCr'>" + Cut_Zero(Get_from_Wei(Sender_BalanceBN.toString(), 18)) + ' ' + Worker2[0] + "</span>";
 			if (Sender_BalanceBN.isNeg()) {
-				checklist = checklist + "● Sending currency + gas > balance. Broadcast could be fail.<br /><br />";
-				TmpStr = "<br/><br/>Estimated balance: <span class='mCr'>N/A</span>"
+				checklist = checklist + "● 送出的貨幣 + 瓦斯費用 > 餘額。廣播很可能會失敗。<br /><br />";
+				TmpStr = "<br/><br/>預計餘額: <span class='mCr'>N/A</span>"
 				NeedConfirm = true;
 			}
 			LargeData = LargeData + TmpStr;
@@ -426,10 +426,10 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 
 		// if Alert
 		if (NeedConfirm){
-			checklist = checklist + "Forced to continue, please select &#39;OK&#39;, else &#39;Cancel&#39;.";
+			checklist = checklist + "若要強迫繼續，請選擇 &#39;確認&#39; ，否則請選 &#39;取消&#39; 。";
 
 			document.getElementById('DPaper2').style.display="";
-			document.getElementById('ConTit').innerHTML="&#9888; Confirm"
+			document.getElementById('ConTit').innerHTML="&#9888; 確認"
 			document.getElementById('ConMsg').innerHTML=checklist;
 
 			ConfirmChoice = 0;
@@ -451,11 +451,11 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 			}
 		}
 
-		LargeData = LargeData + "<br/><br/>Nonce: <span class='mCr'>" + The_Nonce +"</span>";
-		LargeData = LargeData + "<br/><br/>If you confirm everything is correct, press &#39;OK&#39;, else &#39;Cancel&#39;.";
+		LargeData = LargeData + "<br/><br/>Nonce 值: <span class='mCr'>" + The_Nonce +"</span>";
+		LargeData = LargeData + "<br/><br/>您若確定一切無誤，請選擇 &#39;確認&#39; ，否則請選 &#39;取消&#39; 。";
 		
 		document.getElementById('DPaper2').style.display="";
-		document.getElementById('ConTit').innerHTML="&#9888; Final check"
+		document.getElementById('ConTit').innerHTML="&#9888; 最終檢查"
 			document.getElementById('ConMsg').innerHTML=LargeData;
 
 			ConfirmChoice = 0;
@@ -519,14 +519,14 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 
 		if (TransactionSign.length <= 3) {
 			document.getElementById('DarkPaper').style.display="";
-			document.getElementById('ErrMsg').innerHTML = 'Signed transaction is empty. Make it first.';
+			document.getElementById('ErrMsg').innerHTML = '已簽名的交易不存在，請先產生。';
 			return;
 		}
 
 		var TS_status;
 
-		TS_status = 'Waiting transaction be broadcast...it may take long time.<br /><br />';
-		TS_status = TS_status + 'If waiting too long, recheck the filled data, and remake an new transaction.<br /><br />(Maybe gas too low, etc.)';
+		TS_status = '等待交易被廣播...這可能要等上滿長的時間。<br /><br />';
+		TS_status = TS_status + '如果等太久，請重新檢查填入的資料，再產生一份新的交易。<br /><br />(可能是 Gas 費用太低等原因)';
 		document.getElementById('SIBR').innerHTML = TS_status;
 
 		try {
@@ -540,12 +540,12 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 			var getTransactionReceipt = await web3.eth.sendSignedTransaction(TransactionSign);
 
 			if (getTransactionReceipt.status) {
-				TS_status = "Success.";
-				TS_status = TS_status + "<br /><br />Block number: " + getTransactionReceipt.blockNumber;
-				TS_status = TS_status + "<br /><br />Index in Block: " + getTransactionReceipt.transactionIndex;
-				TS_status = TS_status + "<br /><br />This transaction is already on the chain.<br /><br />Attention: The signed transaction data is not reusable.";
+				TS_status = "成功。";
+				TS_status = TS_status + "<br /><br />區塊編號: " + getTransactionReceipt.blockNumber;
+				TS_status = TS_status + "<br /><br />位於區塊索引: " + getTransactionReceipt.transactionIndex;
+				TS_status = TS_status + "<br /><br />此交易已經上鏈。<br /><br />注意: 此份已簽名交易資料不可再次於本鏈上重複使用。";
 			} else { 
-				TS_status = "Reverted.<br /><br />";
+				TS_status = "被撤銷。<br /><br />";
 				TS_status = TS_status + getRevertReason(getTransactionReceipt.transactionHash);
 				document.getElementById('DoItbtn').removeAttribute("disabled");
 			};
@@ -553,7 +553,7 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 			document.getElementById('SIBR').innerHTML = TS_status;
 
 		} catch (exception) {
-			document.getElementById('SIBR').innerHTML = exception + "<br/><br/>Please check if internet connected, and RPC server is alive.";
+			document.getElementById('SIBR').innerHTML = exception + "<br/><br/>請檢查網路是否已連通，RPC伺服器是否正常運作。";
 			document.getElementById('DoItbtn').removeAttribute("disabled");
 		}
 	}
@@ -608,19 +608,19 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 			var result = await web3.eth.call(tx, tx.blockNumber);
 			result = result.startsWith('0x') ? result : `0x${result}`
 			if (result && result.substr(138)) {
- 				const reason = 'Reason: ' + web3.utils.toAscii(result.substr(138));
+ 				const reason = '原由: ' + web3.utils.toAscii(result.substr(138));
   				return reason;
 			} else {
-				return 'Reason: Unknow.'
+				return '原由: 未知。'
 			}
 		} catch {
-			return 'Reason: Unknow. Error happend.'
+			return '原由: 未知。有錯誤發生。'
 		}
 	}
 	
-</script>
+	</script>
 	<style>
-	body, button, input, select, textarea{font-family: sans-serif; font-size: 22px;}
+	body, button, input, select, textarea{font-family: "Microsoft JhengHei", "SimHei", "STHeiti", "Noto Sans TC", sans-serif; font-size: 22px;}
 	.btn{font-family: serif; font-size: 26px}
 	.TitStr{font-size: 30px; font-family: serif;}
 	.good{border: 1px outset black; width:780px; height: auto; background-color:#eeeeff; padding: 0 15px 15px 15px; margin:0px auto; border-radius: 15px;}
@@ -675,10 +675,10 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
   <body>
 	<div id="DarkPaper" class="darkpaper">
 		<div id="AlertDIV" class="warning">
-			<span style="color: #900000;">&#9888; Message</span><br /><br />
+			<span style="color: #900000;">&#9888; 訊息</span><br /><br />
 			<span id="ErrMsg" class="Msgbox"></span><br /><br />
 			<div style="width:100%; height: auto; text-align:center;">
-				<button onclick="document.getElementById('DarkPaper').style.display='none';" class="btn" >&nbsp;Close&nbsp;</button>
+				<button onclick="document.getElementById('DarkPaper').style.display='none';" class="btn" >&nbsp;關閉&nbsp;</button>
 			</div>
 		</div>
 	</div>
@@ -687,133 +687,133 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 			<span id="ConTit" style="color: #900000;"></span><br /><br />
 			<span id="ConMsg" class="Msgbox"></span><br /><br />
 			<div style="width:100%; height: auto; text-align:center;">
-				<button onclick="ConfirmChoice='1';" class="btn">&nbsp;OK&nbsp;</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<button onclick="ConfirmChoice='2';" class="btn" >&nbsp;Cancel&nbsp;</button>
+				<button onclick="ConfirmChoice='1';" class="btn">&nbsp;確認&nbsp;</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<button onclick="ConfirmChoice='2';" class="btn" >&nbsp;取消&nbsp;</button>
 			</div>
 		</div>
 	</div>
 	<div id="DPaper3" class="darkpaper">
 		<div id="CopyClp" class="warning" style="border:solid 2px blue; width:200px; top:150px;">
 			<div style="width:100%; height: auto; text-align:center;">
-				<span id="Copy1" style="color: #001690; text-align: center;">Copied.</span><br /><br />
-				<button onclick="document.getElementById('DPaper3').style.display='none';" class="btn" >&nbsp;OK&nbsp;</button>
+				<span id="Copy1" style="color: #001690; text-align: center;">已複製。</span><br /><br />
+				<button onclick="document.getElementById('DPaper3').style.display='none';" class="btn" >&nbsp;確認&nbsp;</button>
 			</div>
 		</div>
 	</div>
 	<br />
     <div id="main" class="good">
 		<br />
-		<span style="font-size: 32px; font-family: serif;">Overdoing ETH Warm Wallet v<span id='ver'></span></span><br />
-		<span style="font-size: 20px;">Using <a href="https://github.com/ChainSafe/web3.js">web3.js</a> API Ver: <span id='web3v'></span></span><br /><br />
+		<span style="font-size: 32px; font-family: serif;">Overdoing ETH 暖錢包 v<span id='ver'></span> 正體中文版</span><br />
+		<span style="font-size: 20px;">使用 <a href="https://github.com/ChainSafe/web3.js">web3.js</a> API Ver: <span id='web3v'></span></span><br /><br />
 		<div id="block1" class="Declare">
 			<br />
-			<b>* Declare *</b><br /><br />
-			This is <a href='https://github.com/overdoignism/Overdoing-ETH-Warm-Wallet'>Overdoing ETH Warm Wallet</a> project. It&#39;s totally open source with <a href="https://github.com/overdoignism/Overdoing-ETH-Warm-Wallet/blob/main/LICENSE">LGPLv3 license.</a><br /><br />
-			QRcode is generated by <a href="https://github.com/davidshimjs/qrcodejs">QRcode.js</a> and <a href="https://jquery.org/license/">jQuery</a> library. All they are MIT license. <br /><br />
+			<b>* 聲明 *</b><br /><br />
+			這是 <a href='https://github.com/overdoignism/Overdoing-ETH-Warm-Wallet'>Overdoing ETH 暖錢包</a> 企劃。它是完全開源並採取 <a href="https://github.com/overdoignism/Overdoing-ETH-Warm-Wallet/blob/main/LICENSE">LGPLv3 </a>授權。<br /><br />
+			QRcode 是由 <a href="https://github.com/davidshimjs/qrcodejs">QRcode.js</a> 與 <a href="https://jquery.org/license/">jQuery</a> 函式庫產生。它們皆屬 MIT 授權。<br /><br />
 			<span style="color: #900000">
-			&#9888; The author has no any responsibility at any conditions. Please refer to LGPLv3 license. &#9888;<br /><br />
-			&#9888; The wallet is not for contract / token / NFT, Please confirm your purpose before using. &#9888;<br /><br />
+			&#9888; 作者在任何條件下對於本作品皆沒有任何義務與責任，請參照 LGPLv3 授權。 &#9888;<br /><br />
+			&#9888; 此錢包不支援代幣、智能合約或 NFT，使用前請確認你發送的貨幣類別。 &#9888;<br /><br />
 			</span>			
-			Welcome any currency tip: 0x7cE987d1C417DBb86CfE6f9Ac6cfEDF7554853AF 
-			<input type="button" onclick="CopyAddr()" id="CopyAddr" style="font-size: 16px;" value="&nbsp;Copy&nbsp;" />
+			歡迎任何種類與數量的打賞: 0x7cE987d1C417DBb86CfE6f9Ac6cfEDF7554853AF 
+			<input type="button" onclick="CopyAddr()" id="CopyAddr" style="font-size: 16px;" value="&nbsp;複製&nbsp;" />
 			<br />
 		</div>
 		<br />
 		<div id="block2" class="good2">
 			<br />
-			<span class="TitStr">Initial</span><br /><br />	
+			<span class="TitStr">開始</span><br /><br />	
 			<form method="POST" action="">
-				Transaction memo ( Optional ) <br />
+				交易便記 ( 選用 ) <br />
 				<input maxlength="69" name="uname" id="uname" type="text" class="InputTxt" style="width: 450px;"/> &nbsp;
-				<input type="submit" class="btn" value="&nbsp;Save (Reload)&nbsp;" title="For browser memory private key"><br /><br />
-				Sender&#39;s private key <br />
+				<input type="submit" class="btn" value="&nbsp;儲存 (會重載)&nbsp;" title="讓瀏覽器記住私鑰用"><br /><br />
+				發送者私鑰 <br />
 				<input maxlength="69" name="S_PKEY" id="S_PKEY" required="required" type="password" class="InputTxt"/><br /><br />
-				Select currency type &amp; RPC server<br />
+				選擇加密貨幣種類與 RPC 伺服器<br />
 				<select id="CC_TYPE" class="InputTxt">
 				</select><br /><br />
 			</form>
 			<br />
 			<div id="TxCodeDIV" class="cool3">
-				<span class="TitStr">Tx4Sign </span>paste here&nbsp;&nbsp;&#129034;&nbsp;&nbsp;
+				<span class="TitStr">Tx4Sign </span>貼到此處&nbsp;&nbsp;&#129034;&nbsp;&nbsp;
 				<input id="TXSCode" type="text" class="InputTxt" style="width: 30%;"/>&nbsp;&nbsp;&nbsp;
-				<input type="button" onclick="GetFromTXS();" class="btn" value="&nbsp;Load&nbsp;">
+				<input type="button" onclick="GetFromTXS();" class="btn" value="&nbsp;載入&nbsp;">
 				<br />
 			</div>
 			<div style="height:10px"></div>
 			<div style="text-align: center; background-color:#eeeeff; border-radius: 15px; padding: 10px;" >
-				Please select a method &#129033; &#129035;, or enter all data by manually. 
+				請選擇一個方式 &#129033; &#129035;，或全部由手動輸入。 
 			</div>
 			<div style="height:10px"></div>
 			<div id="Info01" class="cool3">
 				<div style="text-align: center;">
-					<span class="TitStr">Information</span> &nbsp; 
-					<input type="button" onclick="GetInfo()" class="btn" value="&nbsp;Retrieve&nbsp;" id="GetInfo">
-					&nbsp;&nbsp;&#129032;&nbsp;&nbsp;Need internet connected
+					<span class="TitStr">資訊</span> &nbsp; 
+					<input type="button" onclick="GetInfo()" class="btn" value="&nbsp;取得&nbsp;" id="GetInfo">
+					&nbsp;&nbsp;&#129032;&nbsp;&nbsp;需要網路連線
 				</div>
 				<div id="Info02" style="text-align: left;">
 					<br />
-					Retrieved block height and retrieve time<br />
+					取得時塊高度與時間<br />
 					<input readonly id="WORK" type="text" class="ReadOnlyInput" style="letter-spacing: 1.5px;"/><br /><br />
 
-					Sender&#39;s address<br />
+					發送者的地址<br />
 					<input readonly id="S_ADDR" type="text" class="ReadOnlyInput"/><br /><br />
 
-					Sender&#39;s balance<br />
+					發送者的餘額<br />
 					<input readonly id="BALA" type="text" class="ReadOnlyInput"/><input readonly id="TrueBALA" type="hidden"><br /><br />
 				
-					Sender&#39;s nonce<br />
+					發送者現在的 nonce 值<br />
 					<input readonly id="NONC" type="text" class="ReadOnlyInput"/><br /><br />
 				
-					Current gas per price (in Gwei)<br />
+					當前 Gas 價格 (Gwei)<br />
 					<input readonly id="GASP" type="text" class="ReadOnlyInput"/><br /><br />
 				
-					<span style="color:#976f34;">Current base gas per price (Need EIP-1559) (in Gwei)</span><br />
-					<input readonly id="BGASP" type="text" class="ReadOnlyInput" title="Current for reference only" style="color:#976f34;" /><br />
+					<span style="color:#976f34;">當前 base gas 價格 (需要 EIP-1559) (Gwei)</span><br />
+					<input readonly id="BGASP" type="text" class="ReadOnlyInput" title="目前僅供參考" style="color:#976f34;" /><br />
 				</div>
 			</div>
 			<br />
-			<span class="TitStr">Fill transaction data</span><br /><br />
-			Receiver&#39;s address ( Case match is better )<br />
+			<span class="TitStr">填寫交易資料</span><br /><br />
+			接收者地址 ( 大小寫最好要符合 )<br />
 			<input id="R_ADDR" type="text" class="InputTxt"/><br /><br />
 			
-			How much cryptocurrency to send<br />
+			要發送多少加密貨幣<br />
 			<input id="S_ETH" type="number" min="0" value="0" step="any" class="InputTxt"/><br /><br />
 			
-			Sender&#39;s nonce<br />
+			發送者的 nonce 值<br />
 			<input id="S_NONC" type="number" min="0" value="0" step="any" class="InputTxt"/><br /><br />
 			
-			Gas price (in Gwei)<br />
+			Gas 價格 (Gwei)<br />
 			<input id="G_PRIC" type="number" min="0" value="0" step="any" class="InputTxt"/><br /><br />
 			
 			<div id="TxSigned1" class="cool2">
 				<div style="text-align: center;">
-					<span class="TitStr">Signed transaction</span> &nbsp; 
-					<input type="button" onclick="MakeTransaction()" class="btn" value="&nbsp;Make&nbsp;" title="">
+					<span class="TitStr">簽名的交易</span> &nbsp; 
+					<input type="button" onclick="MakeTransaction()" class="btn" value="&nbsp;產生&nbsp;" title="">
 				</div>
 				<div id="TxSigned2">
-					<br />The main RLP signature ( For node broadcast )<br />
+					<br />主 RLP 簽名 ( 用於節點廣播 )<br />
 					<div id="TX01" class="RPTxt">
 						<div id="MTR_SIGN" style="margin: 10px; width: 75%;"><br />N/A<br /></div>
 						<div id="COPYBT1" style="margin: 10px; width: 25%; display: flex; align-items: center;">
-							<input type="button" onclick="Copy2Clipboard('MTR_SIGN')" id="Copy2clipMS" class="btn" value="&nbsp;Copy&nbsp;" />
+							<input type="button" onclick="Copy2Clipboard('MTR_SIGN')" id="Copy2clipMS" class="btn" value="&nbsp;複製&nbsp;" />
 						</div>
 					</div>
 					<br />
 					<div id="QrSQU" class="qrdiv">
 						<div style="display: flex; flex-direction: row;">
 							<div style="margin: 10px; width: 50%; text-align: center;">QRcode</div>
-							<div style="margin: 10px; width: 50%; text-align: center;">Assistant link</div>
+							<div style="margin: 10px; width: 50%; text-align: center;">助手連結</div>
 						</div>
 						<div style="display: flex; flex-direction: row;">
 							<div id="QrcodeDIV" style="display: flex; justify-content: center; margin: 10px; width: 50%;"></div>
 							<div id="QrcodeDIV2" style="display: flex; justify-content: center; margin: 10px; width: 50%;"></div>
 						</div>
 					</div>
-					<br />Transaction Hash ( For transaction tracing )<br />
+					<br />交易雜湊值 ( 用於交易結果追蹤 )<br />
 					<div id="TX02" class="RPTxt">
 						<div id="TH" style="margin: 10px; width: 75%;"><br />N/A<br /></div>
 						<div id="COPYBT2" style="margin: 10px; width: 25%; display: flex; align-items: center;">
-							<input type="button" onclick="Copy2Clipboard('TH')" id="Copy2clipTH" class="btn" value="&nbsp;Copy&nbsp;" />
+							<input type="button" onclick="Copy2Clipboard('TH')" id="Copy2clipTH" class="btn" value="&nbsp;複製&nbsp;" />
 						</div>
 					</div>
 					<br />
@@ -826,21 +826,21 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 			<br />
 			<div id="BroadcastDiv1" class="cool2">
 				<div style="text-align: center;">
-					<span class="TitStr">Broadcast</span> &nbsp; 
-					<input type="button" onclick="GoBroadcast()" id="DoItbtn" class="btn" value="&nbsp;Do it&nbsp;" title="Internet connection needed. Make signed transaction first." disabled="disabled" />
-					&nbsp;&nbsp;&#129032;&nbsp;&nbsp;Need internet connected
+					<span class="TitStr">廣播</span> &nbsp; 
+					<input type="button" onclick="GoBroadcast()" id="DoItbtn" class="btn" value="&nbsp;來吧&nbsp;" title="需要網路連線。請先產生已簽名交易。" disabled="disabled" />
+					&nbsp;&nbsp;&#129032;&nbsp;&nbsp;需要網路連線
 				</div>
 				<div id="BroadcastDiv2">
-					<br />Broadcast result<br />
+					<br />廣播結果<br />
 					<div id="SIBR" class="RPTxt">N/A</div>	
 				</div>
 			</div>
 		</div>
 		<br />
 		<div class="good2" style="text-align:center; padding: 20px 15px 20px 15px;">
-			<input type="button" onclick="ClearAll()" id="CLR" class="btn" value="&nbsp;Clear&nbsp;" />
+			<input type="button" onclick="ClearAll()" id="CLR" class="btn" value="&nbsp;清除&nbsp;" />
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<input type="button" onclick="window.close()" id="BYE" class="btn" value="&nbsp;Bye&nbsp;" />
+			<input type="button" onclick="window.close()" id="BYE" class="btn" value="&nbsp;再見&nbsp;" />
 		</div>
 	</div>
   </body>
