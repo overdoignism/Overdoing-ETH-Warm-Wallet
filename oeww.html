@@ -1,7 +1,7 @@
 <!--
  * Overdoing ETH Warm Wallet
  * It's an ETH warm wallet developed by overdoingism Lab.
- * ver 0.94
+ * ver 0.95
  * LGPL v3 License
  * The author does not have any warranty or responsibility.
  * 
@@ -15,6 +15,7 @@
   <head>
     <title>Overdoing ETH Warm Wallet</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
 <script>
 	//jQuery 3.6.0 (jquery-3.6.0.min.js)
@@ -106,7 +107,7 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 		web3 = new Web3(Web3.currentProvider);
 		document.getElementById('web3v').innerHTML = web3.version;
 		assistant = 'https://overdoignism.github.io/Overdoing-ETH-Warm-Wallet/EWWA.html?';
-		document.getElementById('ver').innerHTML = '0.94';
+		document.getElementById('ver').innerHTML = '0.95';
 		SetOption();
 	});
 
@@ -667,8 +668,21 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 		word-wrap: break-word;
 	}
 	.mCr{color:#3f47c0; letter-spacing: 1.8px;}
+	.rotate-textN90{
+		display: inline-block;
+  		transform: rotate(-90deg);
+		padding: 0px 15px 0px 5px;
+		width: 12px;
+	}
+	.rotate-textF90{
+		display: inline-block;
+  		transform: rotate(90deg);
+		padding: 0px 15px 0px 5px;
+		width: 12px;
+	}
 	a:link { text-decoration: none; }
 	a:hover { text-decoration: underline; }
+
 	</style>
   </head>
   
@@ -734,21 +748,24 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 			</form>
 			<br />
 			<div id="TxCodeDIV" class="cool3">
-				<span class="TitStr">Tx4Sign </span>paste here&nbsp;&nbsp;&#129034;&nbsp;&nbsp;
+				<span class="TitStr">Tx4Sign </span>paste here&nbsp;&nbsp;&#10140;&nbsp;&nbsp;
 				<input id="TXSCode" type="text" class="InputTxt" style="width: 30%;"/>&nbsp;&nbsp;&nbsp;
 				<input type="button" onclick="GetFromTXS();" class="btn" value="&nbsp;Load&nbsp;">
 				<br />
 			</div>
 			<div style="height:10px"></div>
-			<div style="text-align: center; background-color:#eeeeff; border-radius: 15px; padding: 10px;" >
-				Please select a method &#129033; &#129035;, or enter all data by manually. 
+			<div style="text-align: center; background-color:#eeeeff; border-radius: 15px; padding: 10px; flex-direction: row;" >
+				Please select a method 
+				<span class="rotate-textN90">&#10140;</span>
+				<span class="rotate-textF90">&#10140;</span>
+				, or enter all data by manually.
 			</div>
 			<div style="height:10px"></div>
 			<div id="Info01" class="cool3">
 				<div style="text-align: center;">
 					<span class="TitStr">Information</span> &nbsp; 
 					<input type="button" onclick="GetInfo()" class="btn" value="&nbsp;Retrieve&nbsp;" id="GetInfo">
-					&nbsp;&nbsp;&#129032;&nbsp;&nbsp;Need internet connected
+					&nbsp;&nbsp;( Need internet connected )
 				</div>
 				<div id="Info02" style="text-align: left;">
 					<br />
@@ -828,7 +845,7 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 				<div style="text-align: center;">
 					<span class="TitStr">Broadcast</span> &nbsp; 
 					<input type="button" onclick="GoBroadcast()" id="DoItbtn" class="btn" value="&nbsp;Do it&nbsp;" title="Internet connection needed. Make signed transaction first." disabled="disabled" />
-					&nbsp;&nbsp;&#129032;&nbsp;&nbsp;Need internet connected
+					&nbsp;&nbsp;( Need internet connected )
 				</div>
 				<div id="BroadcastDiv2">
 					<br />Broadcast result<br />
