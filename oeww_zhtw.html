@@ -1,7 +1,7 @@
 <!--
  * Overdoing ETH Warm Wallet
  * It's an ETH warm wallet developed by overdoingism Lab.
- * ver 0.95
+ * ver 0.96
  * LGPL v3 License
  * The author does not have any warranty or responsibility.
  * 
@@ -107,7 +107,7 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 		web3 = new Web3(Web3.currentProvider);
 		document.getElementById('web3v').innerHTML = web3.version;
 		assistant = 'https://overdoignism.github.io/Overdoing-ETH-Warm-Wallet/EWWA_zhtw.html?';
-		document.getElementById('ver').innerHTML = '0.95';
+		document.getElementById('ver').innerHTML = '0.96';
 		SetOption();
 	});
 
@@ -160,7 +160,7 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 			ThereIsError = true;
 		}
 		if (ThereIsError) {
-			document.getElementById('DarkPaper').style.display="";
+			document.getElementById('DarkPaper').style.display="block";
 			document.getElementById('ErrMsg').innerHTML = "Tx4Sign 碼是空的或無效。請檢查後重試。";
 			return;
 		}
@@ -174,10 +174,6 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 	}
 
 	function ClearAll() {
-		document.getElementById('DarkPaper').style.display='none';
-		document.getElementById('DPaper2').style.display='none';
-		document.getElementById('DPaper3').style.display='none';
-		document.getElementById('uname').value = '';
 		document.getElementById('S_PKEY').value = '';
 		document.getElementById('WORK').value = '';
 		document.getElementById('BALA').value = '';
@@ -211,13 +207,13 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 		var txt = document.getElementById(what2copy).innerHTML;
 		if (txt != ''){
 			await navigator.clipboard.writeText(txt);
-			document.getElementById('DPaper3').style.display='';
+			document.getElementById('DPaper3').style.display="block";
 		}
 	}
 
 	async function CopyAddr(){
 		await navigator.clipboard.writeText('0x7cE987d1C417DBb86CfE6f9Ac6cfEDF7554853AF');
-		document.getElementById('DPaper3').style.display='';
+		document.getElementById('DPaper3').style.display="block";
 	}
 
 	async function GetInfo() {
@@ -249,11 +245,31 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 			Private_Key = document.getElementById('S_PKEY').value;
 			TheSender = web3.eth.accounts.privateKeyToAccount(Private_Key);
 		} catch {
-			document.getElementById('DarkPaper').style.display="";
+			document.getElementById('DarkPaper').style.display="block";
 			document.getElementById('ErrMsg').innerHTML = "私鑰是空的、或是有錯誤。請檢查後重試。";
 			document.getElementById('GetInfo').removeAttribute("disabled");
 			return;
 		}
+
+		// Get Private key + TheSender and check
+		var ErrChk;
+		Private_Key = GetTrueSenderPkey();
+		if (!Private_Key) {
+			ErrChk = true;
+		} else {
+			try {
+				TheSender = web3.eth.accounts.privateKeyToAccount(Private_Key);
+			} catch {
+				ErrChk = true;
+			}
+		}
+		if (ErrChk) {
+			document.getElementById('DarkPaper').style.display="block";
+			document.getElementById('ErrMsg').innerHTML = "私鑰是空的、或是有錯誤。請檢查後重試。";
+			document.getElementById('GetInfo').removeAttribute("disabled");
+			return;
+		}
+
 
 		try{	
 			
@@ -292,12 +308,33 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 			}
 
 		} catch (exception) {
-			document.getElementById('DarkPaper').style.display="";
+			document.getElementById('DarkPaper').style.display="block";
 			document.getElementById('ErrMsg').innerHTML = exception + "<br/><br/>請檢查網路是否已連通，RPC伺服器是否正常運作。";
 		}
 
 		document.getElementById('GetInfo').removeAttribute("disabled");
-		document.getElementById('Info02').style.display="";
+		document.getElementById('Info02').style.display="block";
+	}
+
+	function GetTrueSenderPkey() {
+
+		var WorkStr;
+		var WorkStr2;
+		var ErrState = false;
+
+		WorkStr = document.getElementById('S_PKEY').value.trim();
+		WorkStr2 = WorkStr.split("#");
+
+		if (WorkStr == "") {
+			return false;
+		} else if (WorkStr2.length == 1) {
+			return WorkStr;
+		} else if (WorkStr2.length == 2) {
+			return WorkStr2[1];
+		} else {
+			return false;
+		}
+
 	}
 
 	async function MakeTransaction() {
@@ -319,13 +356,21 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 		var checklist = "";
 		var NeedConfirm = false;
 
-		// Check Private key
-		try {
-			Private_Key = document.getElementById('S_PKEY').value;
-			TheSender = web3.eth.accounts.privateKeyToAccount(Private_Key);
-		} catch {
-			document.getElementById('DarkPaper').style.display="";
-			document.getElementById('ErrMsg').innerHTML = '私鑰是空的、或是有錯誤。請檢查後重試。';
+		// Get Private key + TheSender and check
+		var ErrChk;
+		Private_Key = GetTrueSenderPkey();
+		if (!Private_Key) {
+			ErrChk = true;
+		} else {
+			try {
+				TheSender = web3.eth.accounts.privateKeyToAccount(Private_Key);
+			} catch {
+				ErrChk = true;
+			}
+		}
+		if (ErrChk) {
+			document.getElementById('DarkPaper').style.display="block";
+			document.getElementById('ErrMsg').innerHTML = "私鑰是空的、或是有錯誤。請檢查後重試。";
 			return;
 		}
 
@@ -335,14 +380,14 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 		try {
 			var NewR_Addr = Web3.utils.toChecksumAddress(Receiver_Addr)
 		} catch(exception) {
-			document.getElementById('DarkPaper').style.display="";
+			document.getElementById('DarkPaper').style.display="block";
 			document.getElementById('ErrMsg').innerHTML = "接收者的地址為空、或是無效。請檢查後重試。";
 			return;
 		}
 
 		if(NewR_Addr != Receiver_Addr) {
 
-			document.getElementById('DPaper2').style.display="";
+			document.getElementById('DPaper2').style.display="block";
 			document.getElementById('ConTit').innerHTML="&#9888; 確認"
 			document.getElementById('ConMsg').innerHTML="接收者地址的檢核碼檢查失敗。<br /><br />\
 			這不一定是真的發生錯誤，<br />可能是因為輸入時忽略了字母大小寫所致。<br /><br />\
@@ -397,7 +442,7 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 			GasBN2Back = GasBN2Back.div(new BN(GetMulWhat(Gas_Price)));
 			TrueSendGas = GasBN2Back.toString();
 		} else {
-			document.getElementById('DarkPaper').style.display="";
+			document.getElementById('DarkPaper').style.display="block";
 			document.getElementById('ErrMsg').innerHTML = 'Gas 費用必須 > 0 ，請修正。';
 			return;
 		}
@@ -429,7 +474,7 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 		if (NeedConfirm){
 			checklist = checklist + "若要強迫繼續，請選擇 &#39;確認&#39; ，否則請選 &#39;取消&#39; 。";
 
-			document.getElementById('DPaper2').style.display="";
+			document.getElementById('DPaper2').style.display="block";
 			document.getElementById('ConTit').innerHTML="&#9888; 確認"
 			document.getElementById('ConMsg').innerHTML=checklist;
 
@@ -455,7 +500,7 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 		LargeData = LargeData + "<br/><br/>Nonce 值: <span class='mCr'>" + The_Nonce +"</span>";
 		LargeData = LargeData + "<br/><br/>您若確定一切無誤，請選擇 &#39;確認&#39; ，否則請選 &#39;取消&#39; 。";
 		
-		document.getElementById('DPaper2').style.display="";
+		document.getElementById('DPaper2').style.display="block";
 		document.getElementById('ConTit').innerHTML="&#9888; 最終檢查"
 			document.getElementById('ConMsg').innerHTML=LargeData;
 
@@ -506,9 +551,9 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 			document.getElementById("QrcodeTx").innerHTML='';
 			new QRCode(document.getElementById("QrcodeTx"), {text: TR_SIGN_OBJ.transactionHash ,correctLevel : QRCode.CorrectLevel.M, width: 200, height: 200  })
 			document.getElementById('DoItbtn').removeAttribute("disabled");
-			document.getElementById('TxSigned2').style.display="";
+			document.getElementById('TxSigned2').style.display="block";
 		} catch (exception) {
-			document.getElementById('DarkPaper').style.display="";
+			document.getElementById('DarkPaper').style.display="block";
 			document.getElementById('ErrMsg').innerHTML = exception;
 			return;
 		}
@@ -519,7 +564,7 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 		var TransactionSign = document.getElementById('MTR_SIGN').innerHTML; //SIGTR
 
 		if (TransactionSign.length <= 3) {
-			document.getElementById('DarkPaper').style.display="";
+			document.getElementById('DarkPaper').style.display="block";
 			document.getElementById('ErrMsg').innerHTML = '已簽名的交易不存在，請先產生。';
 			return;
 		}
@@ -532,7 +577,7 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 
 		try {
 			document.getElementById('DoItbtn').setAttribute("disabled","disabled");
-			document.getElementById('BroadcastDiv2').style.display="";
+			document.getElementById('BroadcastDiv2').style.display="block";
 
 			var Worker = document.getElementById('CC_TYPE').value;
 			Worker2 = Worker.split(',');
@@ -593,6 +638,7 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 			return TmpWorker01;
 		}
 	}
+	
 	function GetMulWhat(TestTarget) {
 		var TestArray = TestTarget.toString().split(".");
 
@@ -619,6 +665,32 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 		}
 	}
 	
+	async function TestMemoAndPkey() {
+		var Private_Key;
+		var TheSender;
+		// Get Private key + TheSender and check
+		var ErrChk;
+		Private_Key = GetTrueSenderPkey();
+		if (!Private_Key) {
+			ErrChk = true;
+		} else {
+			try {
+				TheSender = web3.eth.accounts.privateKeyToAccount(Private_Key);
+			} catch {
+				ErrChk = true;
+			}
+		}
+		if (ErrChk) {
+			document.getElementById('DarkPaper').style.display="block";
+			document.getElementById('ErrMsg').innerHTML = "私鑰格式不正確。";
+		} else {
+			ConfirmChoice = 0;
+			document.getElementById('DPaper4').style.display="block";
+			document.getElementById('ConMsg2').innerHTML="這次輸入的私鑰，其對映地址為:<br /><br />" + TheSender.address +"<br />\
+			<br />若無誤請選擇 &#39;確認&#39; ，否則請選 &#39;取消&#39; 。";
+		}
+	}
+
 	</script>
 	<style>
 	body, button, input, select, textarea{font-family: "Microsoft JhengHei", "SimHei", "STHeiti", "Noto Sans TC", sans-serif; font-size: 22px;}
@@ -650,6 +722,7 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
   		left:0;
   		width:100%;
 		height:100%;
+		display:none;
 	}
 	.warning{
 		padding: 20px;
@@ -713,6 +786,16 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 			</div>
 		</div>
 	</div>
+	<div id="DPaper4" class="darkpaper">
+		<div id="ConfirmDIV2" class="warning">
+			<span id="ConTit2" style="color: #900000;">&#9888; 確認</span><br /><br />
+			<span id="ConMsg2" class="Msgbox"></span><br /><br />
+			<div style="width:100%; height: auto; text-align:center;">
+				<button onclick="document.getElementById('HardworkForm').submit();" class="btn">&nbsp;確認&nbsp;</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<button onclick="document.getElementById('DPaper4').style.display='none';" class="btn" >&nbsp;取消&nbsp;</button>
+			</div>
+		</div>
+	</div>
 	<br />
     <div id="main" class="good">
 		<br />
@@ -734,17 +817,21 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 		<br />
 		<div id="block2" class="good2">
 			<br />
-			<span class="TitStr">開始</span><br /><br />	
-			<form method="POST" action="">
-				交易便記 ( 選用 ) <br />
-				<input maxlength="69" name="uname" id="uname" type="text" class="InputTxt" style="width: 450px;"/> &nbsp;
-				<input type="submit" class="btn" value="&nbsp;儲存 (會重載)&nbsp;" title="讓瀏覽器記住私鑰用"><br /><br />
-				發送者私鑰 <br />
-				<input maxlength="69" name="S_PKEY" id="S_PKEY" required="required" type="password" class="InputTxt"/><br /><br />
-				選擇加密貨幣種類與 RPC 伺服器<br />
-				<select id="CC_TYPE" class="InputTxt">
-				</select><br /><br />
-			</form>
+			<div>
+				<span class="TitStr">開始</span><br /><br />	
+				<form id="HardworkForm" method="POST" action="">
+					發送者私鑰 <br />
+					<input maxlength="100" name="S_PKEY" id="S_PKEY" required="required" type="text" class="InputTxt"/><br />
+					<span style="font-size: 18px; text-align: center;">你可以使用 便記#私鑰 的方式來儲存私鑰。利用瀏覽器的自動填入功能。</span>
+					<br /><br />
+					<div style="text-align:center;">
+						<input type="button" class="btn" value="&nbsp;儲存 (會重載)&nbsp;" title="讓瀏覽器記住私鑰用" onclick="TestMemoAndPkey()">
+					</div><br />
+					選擇加密貨幣種類與 RPC 伺服器<br />
+					<select id="CC_TYPE" class="InputTxt">
+					</select><br />
+				</form>
+			</div>
 			<br />
 			<div id="TxCodeDIV" class="cool3">
 				<span class="TitStr">Tx4Sign </span>貼到此處&nbsp;&nbsp;&#10140;&nbsp;&nbsp;
@@ -784,7 +871,7 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 					<input readonly id="GASP" type="text" class="ReadOnlyInput"/><br /><br />
 				
 					<span style="color:#976f34;">當前 base gas 價格 (需要 EIP-1559) (Gwei)</span><br />
-					<input readonly id="BGASP" type="text" class="ReadOnlyInput" title="目前僅供參考" style="color:#976f34;" /><br />
+					<input readonly id="BGASP" type="text" class="ReadOnlyInput" title="目前僅供參考" style="color:#976f34;" /><br /><br />
 				</div>
 			</div>
 			<br />
