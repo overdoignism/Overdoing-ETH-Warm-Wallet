@@ -1,7 +1,7 @@
 <!--
  * ETH Warm Wallet assistant
  * It's a part of Overdoing ETH Warm Wallet.
- * ver 0.95
+ * ver 0.97
  * LGPL v3 License
  * The author does not have any warranty or responsibility.
  * 
@@ -43,7 +43,7 @@
 		assistant = 'https://overdoignism.github.io/Overdoing-ETH-Warm-Wallet/EWWA.html?'
 		SetOptionEZ('CC_TYPE');
 		SetOptionEZ('CC_TYPE2');
-		document.getElementById('ver').innerHTML = '0.95';
+		document.getElementById('ver').innerHTML = '0.97';
 	});
 
 	function SetOptionEZ(WhatID) {
@@ -103,6 +103,8 @@
 			}
 			if (Cnt == 2) {
 				document.getElementById('main').style.display="none";
+				document.getElementById('switchModeDIV').style.display="none";
+				document.getElementById('switchModeDIV2').style.display="none";
 				document.getElementById('blockAuto').style.display="";
 			}
 		}
@@ -726,12 +728,12 @@
 				<input type="button" onclick="CopyAddr()" id="CopyAddr" style="font-size: 16px;" value="&nbsp;Copy&nbsp;" /><br />
 		</div>
 		<br />
-		<div id="switchMode" class="good2" style="text-align: center;">
+		<div id="switchModeDIV" class="good2" style="text-align: center;">
 			<br/> 
 			<span id="switchModeStr">RLP sign braodcast tool mode &nbsp;&nbsp;</span>&#10140;&nbsp;&nbsp;
 			<input type="button" onclick="ModeSwitch()" id="ModeSwitchBtn" value="&nbsp;Switch&nbsp;" />
 		</div>
-		<div style="height: 11px;"></div>
+		<div id="switchModeDIV2" style="height: 11px;"></div>
 	</div>
 
 	<div id="main" class="goodB" style="border-top: 0px;">

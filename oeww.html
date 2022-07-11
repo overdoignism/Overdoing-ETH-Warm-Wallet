@@ -1,7 +1,7 @@
 <!--
  * Overdoing ETH Warm Wallet
  * It's an ETH warm wallet developed by overdoingism Lab.
- * ver 0.96
+ * ver 0.97
  * LGPL v3 License
  * The author does not have any warranty or responsibility.
  * 
@@ -107,7 +107,7 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 		web3 = new Web3(Web3.currentProvider);
 		document.getElementById('web3v').innerHTML = web3.version;
 		assistant = 'https://overdoignism.github.io/Overdoing-ETH-Warm-Wallet/EWWA.html?';
-		document.getElementById('ver').innerHTML = '0.96';
+		document.getElementById('ver').innerHTML = '0.97';
 		SetOption();
 	});
 
@@ -811,7 +811,7 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 				<form id="HardworkForm" method="POST" action="">
 					Sender&#39;s private key <br />
 					<input maxlength="100" name="S_PKEY" id="S_PKEY" required="required" type="text" class="InputTxt"/><br />
-					<span style="font-size: 18px; text-align: center;">You may use memo#key to save private key with auto fill function of browser.</span>
+					<span style="font-size: 18px; text-align: center;">You may use memo#`key to save private key with auto fill function of browser.</span>
 					<br /><br />
 					<div style="text-align:center;">
 						<input type="button" class="btn" value="&nbsp;Save (Reload)&nbsp;" title="For browser memory private key" onclick="TestMemoAndPkey()">
