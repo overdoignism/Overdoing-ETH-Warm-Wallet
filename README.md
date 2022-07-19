@@ -11,8 +11,8 @@ Supports multiple ETH type chains, including ETC, AVAX...
 In public beta. Full English instructions will be released soon.
 
 The mnemonic code and private key generator:  
-[BIP39 by iancoleman](https://github.com/iancoleman/bip39)  
-(MIT License) It's also include in release zip.  
+[BIP39 by iancoleman](https://github.com/iancoleman/bip39) (MIT License)  
+It's also include in release zip.  
 
 ## 中文
 這是一個連線／離線兩用的ETH錢包程式，完全開源。  
@@ -27,8 +27,8 @@ The mnemonic code and private key generator:
 支援多種ETH類型鏈，包括ETC、AVAX...
 
 此助記詞與私鑰產生器也已經包含在 release zip 檔案內：  
-[BIP39 by iancoleman](https://github.com/iancoleman/bip39)  
-MIT許可證。這也是一個「一頁式」解決方案。
+[BIP39 by iancoleman](https://github.com/iancoleman/bip39) (MIT許可證。)  
+這也是一個「一頁式」解決方案。
 
 ## Declare
  * [web3.js](https://github.com/ChainSafe/web3.js) is ChainSafe's project with LGPL V3 license 
