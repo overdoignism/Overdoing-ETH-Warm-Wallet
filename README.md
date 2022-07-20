@@ -8,7 +8,8 @@ It can sign transactions offline, let your PC/VM/Smartphone as a big cold wallet
 Or connect to RPC server, using as a super light wallet in a simple way.  
 Supports multiple ETH type chains, including ETC, AVAX...  
 
-In public beta. Full English instructions will be released soon.
+How to use:
+[Youtube (please open CC)](https://youtu.be/wbzfLOe8_ek)  
 
 The mnemonic code and private key generator:  
 [BIP39 by iancoleman](https://github.com/iancoleman/bip39) (MIT License)  
