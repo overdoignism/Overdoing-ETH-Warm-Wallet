@@ -1,7 +1,7 @@
 <!--
  * ETH Warm Wallet assistant
  * It's a part of Overdoing ETH Warm Wallet.
- * ver 0.97
+ * ver 0.98
  * LGPL v3 License
  * The author does not have any warranty or responsibility.
  * 
@@ -34,6 +34,9 @@
 	var web3;
 	var ConfirmChoice;
 	var SwitchMode;
+	var BN = Web3.utils.BN;
+	const ETHtoWei = new BN('1000000000000000000');
+	const GweitoWei = new BN('1000000000');
 	const timeout = async ms => new Promise(res => setTimeout(res, ms));
 
 	window.addEventListener("load", function(){
@@ -43,7 +46,7 @@
 		assistant = 'https://overdoignism.github.io/Overdoing-ETH-Warm-Wallet/EWWA.html?'
 		SetOptionEZ('CC_TYPE');
 		SetOptionEZ('CC_TYPE2');
-		document.getElementById('ver').innerHTML = '0.97';
+		document.getElementById('ver').innerHTML = '0.98';
 	});
 
 	function SetOptionEZ(WhatID) {
@@ -105,7 +108,7 @@ var obj=document.getElementById(WhatID);
 				document.getElementById('main').style.display="none";
 				document.getElementById('switchModeDIV').style.display="none";
 				document.getElementById('switchModeDIV2').style.display="none";
-				document.getElementById('blockAuto').style.display="";
+				document.getElementById('blockAuto').style.display="block";
 			}
 		}
 	}
@@ -114,19 +117,17 @@ var obj=document.getElementById(WhatID);
 		var txt = document.getElementById(what2copy).innerHTML;
 		if (txt != ''){
 			await navigator.clipboard.writeText(txt);
-			document.getElementById('DPaper3').style.display='';
+			document.getElementById('DPaper3').style.display='block';
 		}
 	}
 
 	async function CopyAddr(){
 		await navigator.clipboard.writeText('0x7cE987d1C417DBb86CfE6f9Ac6cfEDF7554853AF');
-		document.getElementById('DPaper3').style.display='';
+		document.getElementById('DPaper3').style.display='block';
 	}
 
 	function ClearAll() {
-		document.getElementById('DarkPaper').style.display='none';
-		document.getElementById('DPaper2').style.display='none';
-		document.getElementById('DPaper3').style.display='none';
+
 		document.getElementById('main2').style.display='none';
 		document.getElementById('WORK').value = '';
 		document.getElementById('BALA').value = '';
@@ -198,7 +199,7 @@ var obj=document.getElementById(WhatID);
 			try {
 				var NewR_Addr = Web3.utils.toChecksumAddress(Addr)
 				if(NewR_Addr != Addr) {
-					document.getElementById('DPaper2').style.display="";
+					document.getElementById('DPaper2').style.display="block";
 					document.getElementById('ConTit').innerHTML="&#9888; 確認"
 					document.getElementById('ConMsg').innerHTML="發送者地址的檢核碼檢查失敗。<br /><br />\
 					這不一定是真的發生錯誤，<br />可能是因為輸入時忽略了字母大小寫所致。<br /><br />\
@@ -225,7 +226,7 @@ var obj=document.getElementById(WhatID);
 					}
 				}
 			} catch(exception) {
-				document.getElementById('DarkPaper').style.display="";
+				document.getElementById('DarkPaper').style.display="block";
 				document.getElementById('ErrMsg').innerHTML = "發送者的地址為空、或是無效。<br />部分資訊無法取得。";
 				SenderAddrErr = true;
 			}
@@ -257,7 +258,7 @@ var obj=document.getElementById(WhatID);
 			}
 
 		} catch (exception) {
-			document.getElementById('DarkPaper').style.display="";
+			document.getElementById('DarkPaper').style.display="block";
 			document.getElementById('ErrMsg').innerHTML = exception;
 		}
 		document.getElementById('GetInfo').removeAttribute("disabled");
@@ -270,9 +271,6 @@ var obj=document.getElementById(WhatID);
 
 		Worker2 = Worker.split(',');
 		web3 = new Web3(Worker2[2]);
-		var BN = web3.utils.BN;
-		const ETHtoWei = new BN('1000000000000000000');
-		const GweitoWei = new BN('1000000000');
 		
 		var Private_Key;
 		var Receiver_Addr;
@@ -303,12 +301,12 @@ var obj=document.getElementById(WhatID);
 		try {
 			var NewR_Addr = Web3.utils.toChecksumAddress(Receiver_Addr)
 		} catch(exception) {
-			document.getElementById('DarkPaper').style.display="";
+			document.getElementById('DarkPaper').style.display="block";
 			document.getElementById('ErrMsg').innerHTML = "接收者的地址為空、或是無效。請檢查後重試。";
 			return;
 		}
 		if(NewR_Addr != Receiver_Addr) {
-			document.getElementById('DPaper2').style.display="";
+			document.getElementById('DPaper2').style.display="block";
 			document.getElementById('ConTit').innerHTML="&#9888; 確認"
 			document.getElementById('ConMsg').innerHTML="接收者地址的檢核碼檢查失敗。<br /><br />\
 			這不一定是真的發生錯誤，<br />可能是因為輸入時忽略了字母大小寫所致。<br /><br />\
@@ -353,7 +351,7 @@ var obj=document.getElementById(WhatID);
 		// Check nonce
 		var The_Nonce = document.getElementById('S_NONC').value;
 		if (The_Nonce == '') {
-			document.getElementById('DarkPaper').style.display="";
+			document.getElementById('DarkPaper').style.display="block";
 			document.getElementById('ErrMsg').innerHTML = "發送者的 nonce 必須填入一有效值。<br /><br />建議你輸入發送者的地址後用 &#39;取得&#39; 來得到該值。";
 			return;
 		}
@@ -368,15 +366,13 @@ var obj=document.getElementById(WhatID);
 			GasBN2Back = GasBN2Back.div(new BN(GetMulWhat(Gas_Price)));
 			TrueSendGas = GasBN2Back.toString();
 		} else {
-			document.getElementById('DarkPaper').style.display="";
+			document.getElementById('DarkPaper').style.display="block";
 			document.getElementById('ErrMsg').innerHTML = 'Gas 費用必須 > 0 ，請修正。';
 			return;
 		}
 		var TrueGasTotal;
 		var GasTotBN2Back = GasBN2Back.mul(new BN('21000'));
 		TrueGasTotal = Cut_Zero(Get_from_Wei(GasTotBN2Back.toString(), 18));
-		//LargeData = LargeData + "<br/><br/>Gas price:<span class='mCr'> " + Gas_Price + " Gwei</span>\
-		//<br/><br/>Total gas cost (x21000): <span class='mCr'>" + TrueGasTotal + ' ' + Worker2[0] + "</span>";
 
 		LargeData = LargeData + "<br/><br/>Gas 價格: <span class='mCr'>" + Gas_Price + " Gwei</span><br/><br/>" 
 		LargeData = LargeData +	"Gas 總花費 (x21000): <span class='mCr'>" + TrueGasTotal + ' ' + Worker2[0] + "</span>";
@@ -398,13 +394,13 @@ var obj=document.getElementById(WhatID);
 			}
 			LargeData = LargeData + TmpStr;
 		}
-		BigOne = BigOne + Gas_Price
+		BigOne = BigOne + Gas_Price;
 
 		// if Alert
 		if (NeedConfirm){
 			checklist = checklist + "若要強迫繼續，請選擇 &#39;確認&#39; ，否則請選 &#39;取消&#39; 。";
 
-			document.getElementById('DPaper2').style.display="";
+			document.getElementById('DPaper2').style.display="block";
 			document.getElementById('ConTit').innerHTML="&#9888; 確認"
 			document.getElementById('ConMsg').innerHTML=checklist;
 
@@ -429,7 +425,7 @@ var obj=document.getElementById(WhatID);
 
 		LargeData = LargeData + "<br/><br/>Nonce 值: <span class='mCr'>" + The_Nonce + "</span>";
 		LargeData = LargeData + "<br/><br/>您若確定一切無誤，請選擇 &#39;確認&#39; ，否則請選 &#39;取消&#39; 。";
-		document.getElementById('DPaper2').style.display="";
+		document.getElementById('DPaper2').style.display="block";
 		document.getElementById('ConTit').innerHTML="&#9888; 最終檢查"
 			document.getElementById('ConMsg').innerHTML=LargeData;
 
@@ -451,7 +447,7 @@ var obj=document.getElementById(WhatID);
 				}
 			}
 
-		document.getElementById('ShowQr').style.display='';
+		document.getElementById('ShowQr').style.display='block';
 		document.getElementById('QrBlock').innerHTML = '';
 		BigOne = btoa(encodeURIComponent(BigOne)); //base64 looks good :P
 
@@ -501,7 +497,7 @@ var obj=document.getElementById(WhatID);
 			document.getElementById('TH').innerHTML = '';
 
 			if (document.getElementById('SIGTR').value == '') {
-				document.getElementById('DarkPaper').style.display="";
+				document.getElementById('DarkPaper').style.display="block";
 				document.getElementById('ErrMsg').innerHTML = 'Signed transaction data is empty.';
 				return;
 			}
@@ -533,7 +529,7 @@ var obj=document.getElementById(WhatID);
 				document.getElementById('Copy2clipTX').removeAttribute("disabled");   
 			
 			} catch (exception) {
-				document.getElementById('DarkPaper').style.display="";
+				document.getElementById('DarkPaper').style.display="block";
 				document.getElementById('ErrMsg').innerHTML = exception;
 				document.getElementById('SIBR').innerHTML = exception + "<br /><br />請確認簽名內容是正確的，<br />並選擇了正確的貨幣與 RPC 伺服器。";
 			}
@@ -608,15 +604,60 @@ var obj=document.getElementById(WhatID);
 
 		if (SwitchMode == 0){
 			document.getElementById('main').style.display='none';
-			document.getElementById('main2').style.display='';
+			document.getElementById('main2').style.display='block';
 			document.getElementById('switchModeStr').innerHTML="錢包助理模式 &nbsp;&nbsp;";
 			SwitchMode = 1;
 		} else {
 			document.getElementById('main2').style.display='none';
-			document.getElementById('main').style.display='';
+			document.getElementById('main').style.display='block';
 			document.getElementById('switchModeStr').innerHTML="RLP 簽名廣播工具模式 &nbsp;&nbsp;";
 			SwitchMode = 0;
 		}
+	}
+
+	async function FillAll() {
+
+		var BALA = document.getElementById('BALA').value;
+
+		if(!BALA || BALA == '') {
+			document.getElementById('DarkPaper').style.display="block";
+			document.getElementById('ErrMsg').innerHTML = '請先取得餘額。';
+			return;
+		}
+
+		// Process Gas price and total gas
+		var Gas_Price = document.getElementById('G_PRIC').value;
+		var GasBN2Back;
+		if (Gas_Price > 0){
+			GasBN2Back = new BN(Gas_Price.toString().replace(".", ""));
+			GasBN2Back = GasBN2Back.mul(GweitoWei);
+			GasBN2Back = GasBN2Back.div(new BN(GetMulWhat(Gas_Price)));
+			TrueSendGas = GasBN2Back.toString();
+		} else {
+			document.getElementById('DarkPaper').style.display="block";
+			document.getElementById('ErrMsg').innerHTML = 'Gas 費用必須 > 0 ，請修正。';
+			return;
+		}
+		var TrueGasTotal;
+		var GasTotBN2Back = GasBN2Back.mul(new BN('21000'));
+		TrueGasTotal = Cut_Zero(Get_from_Wei(GasTotBN2Back.toString(), 18));
+
+		// Check balance enough if balance exist 
+		var Sender_BalanceBN;
+		var Sender_Balance;
+		var TmpStr;
+		Sender_Balance = document.getElementById('TrueBALA').value;
+		Sender_BalanceBN = new BN(Sender_Balance.toString());
+		Sender_BalanceBN = Sender_BalanceBN.sub(GasTotBN2Back);
+
+		if (Sender_BalanceBN.isNeg()) {
+			document.getElementById('DarkPaper').style.display="block";
+			document.getElementById('ErrMsg').innerHTML = '總 Gas 費用已 > 餘額。 此作業無效。';
+			return;
+		}
+
+		document.getElementById('S_ETH').value =  Cut_Zero(Get_from_Wei(Sender_BalanceBN.toString(), 18));
+
 	}
 
 	</script>
@@ -656,6 +697,7 @@ var obj=document.getElementById(WhatID);
   		left:0;
   		width:100%;
 		height:100%;
+		display:none;
 	}
 	.warning{
 		padding: 20px;
@@ -780,15 +822,15 @@ var obj=document.getElementById(WhatID);
 
 			接收者地址 ( 大小寫最好要符合 )<br />
 			<input id="R_ADDR" type="text" class="InputTxt"/><br /><br />
-			
-			要發送多少加密貨幣<br />
-			<input id="S_ETH" type="number" min="0" value="0" step="any" class="InputTxt"/><br /><br />
-			
+					
 			發送者的 nonce 值<br />
 			<input id="S_NONC" type="number" min="0" value="0" step="any" class="InputTxt"/><br /><br />
 			
 			Gas 價格 (Gwei)<br />
 			<input id="G_PRIC" type="number" min="0" value="0" step="any" class="InputTxt"/><br /><br />
+
+			要發送多少加密貨幣 <a href="javascript:void(0);" onclick="FillAll();">&#10140; 使用所有可用餘額</a><br />
+			<input id="S_ETH" type="number" min="0" value="0" step="any" class="InputTxt"/><br /><br />
 
 			<div id="QrSQU" class="cool4">
 				<div id="QrFix" style="text-align:center;">

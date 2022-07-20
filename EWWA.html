@@ -1,7 +1,7 @@
 <!--
  * ETH Warm Wallet assistant
  * It's a part of Overdoing ETH Warm Wallet.
- * ver 0.97
+ * ver 0.98
  * LGPL v3 License
  * The author does not have any warranty or responsibility.
  * 
@@ -34,6 +34,9 @@
 	var web3;
 	var ConfirmChoice;
 	var SwitchMode;
+	var BN = Web3.utils.BN;
+	const ETHtoWei = new BN('1000000000000000000');
+	const GweitoWei = new BN('1000000000');
 	const timeout = async ms => new Promise(res => setTimeout(res, ms));
 
 	window.addEventListener("load", function(){
@@ -43,7 +46,7 @@
 		assistant = 'https://overdoignism.github.io/Overdoing-ETH-Warm-Wallet/EWWA.html?'
 		SetOptionEZ('CC_TYPE');
 		SetOptionEZ('CC_TYPE2');
-		document.getElementById('ver').innerHTML = '0.97';
+		document.getElementById('ver').innerHTML = '0.98';
 	});
 
 	function SetOptionEZ(WhatID) {
@@ -105,7 +108,7 @@
 				document.getElementById('main').style.display="none";
 				document.getElementById('switchModeDIV').style.display="none";
 				document.getElementById('switchModeDIV2').style.display="none";
-				document.getElementById('blockAuto').style.display="";
+				document.getElementById('blockAuto').style.display="block";
 			}
 		}
 	}
@@ -114,19 +117,17 @@
 		var txt = document.getElementById(what2copy).innerHTML;
 		if (txt != ''){
 			await navigator.clipboard.writeText(txt);
-			document.getElementById('DPaper3').style.display='';
+			document.getElementById('DPaper3').style.display='block';
 		}
 	}
 
 	async function CopyAddr(){
 		await navigator.clipboard.writeText('0x7cE987d1C417DBb86CfE6f9Ac6cfEDF7554853AF');
-		document.getElementById('DPaper3').style.display='';
+		document.getElementById('DPaper3').style.display='block';
 	}
 
 	function ClearAll() {
-		document.getElementById('DarkPaper').style.display='none';
-		document.getElementById('DPaper2').style.display='none';
-		document.getElementById('DPaper3').style.display='none';
+
 		document.getElementById('main2').style.display='none';
 		document.getElementById('WORK').value = '';
 		document.getElementById('BALA').value = '';
@@ -199,7 +200,7 @@
 			try {
 				var NewR_Addr = Web3.utils.toChecksumAddress(Addr)
 				if(NewR_Addr != Addr) {
-					document.getElementById('DPaper2').style.display="";
+					document.getElementById('DPaper2').style.display="block";
 					document.getElementById('ConTit').innerHTML="&#9888; Confirm"
 					document.getElementById('ConMsg').innerHTML="Sender&#39;s address has checksum failed.<br /><br />\
 					This is not necessarily an error,<br />may be caused by case ignored when input.<br /><br />\
@@ -226,7 +227,7 @@
 					}
 				}
 			} catch(exception) {
-				document.getElementById('DarkPaper').style.display="";
+				document.getElementById('DarkPaper').style.display="block";
 				document.getElementById('ErrMsg').innerHTML = "Sender&#39;s address is invald or empty.<br />Some information will not be retrieved.";
 				SenderAddrErr = true;
 			}
@@ -258,7 +259,7 @@
 			}
 
 		} catch (exception) {
-			document.getElementById('DarkPaper').style.display="";
+			document.getElementById('DarkPaper').style.display="block";
 			document.getElementById('ErrMsg').innerHTML = exception;
 		}
 		document.getElementById('GetInfo').removeAttribute("disabled");
@@ -271,9 +272,6 @@
 
 		Worker2 = Worker.split(',');
 		web3 = new Web3(Worker2[2]);
-		var BN = web3.utils.BN;
-		const ETHtoWei = new BN('1000000000000000000');
-		const GweitoWei = new BN('1000000000');
 		
 		var Private_Key;
 		var Receiver_Addr;
@@ -303,12 +301,12 @@
 		try {
 			var NewR_Addr = Web3.utils.toChecksumAddress(Receiver_Addr)
 		} catch(exception) {
-			document.getElementById('DarkPaper').style.display="";
+			document.getElementById('DarkPaper').style.display="block";
 			document.getElementById('ErrMsg').innerHTML = "Receiver&#39;s address is invald or empty. Please check and try again.";
 			return;
 		}
 		if(NewR_Addr != Receiver_Addr) {
-			document.getElementById('DPaper2').style.display="";
+			document.getElementById('DPaper2').style.display="block";
 			document.getElementById('ConTit').innerHTML="&#9888; Confirm"
 			document.getElementById('ConMsg').innerHTML="Receiver&#39;s address has checksum failed.<br /><br />\
 			This is not necessarily an error,<br />may be caused by case ignored when input.<br /><br />\
@@ -353,7 +351,7 @@
 		// Check nonce
 		var The_Nonce = document.getElementById('S_NONC').value;
 		if (The_Nonce == '') {
-			document.getElementById('DarkPaper').style.display="";
+			document.getElementById('DarkPaper').style.display="block";
 			document.getElementById('ErrMsg').innerHTML = "The Sender&#39;s nonce must be filled with an appropriate value.<br /><br />Recommend you use &#39;Retrieve&#39; with sender&#39;s address.";
 			return;
 		}
@@ -368,15 +366,13 @@
 			GasBN2Back = GasBN2Back.div(new BN(GetMulWhat(Gas_Price)));
 			TrueSendGas = GasBN2Back.toString();
 		} else {
-			document.getElementById('DarkPaper').style.display="";
+			document.getElementById('DarkPaper').style.display="block";
 			document.getElementById('ErrMsg').innerHTML = 'The Gas price must be > 0 , please correct it.';
 			return;
 		}
 		var TrueGasTotal;
 		var GasTotBN2Back = GasBN2Back.mul(new BN('21000'));
 		TrueGasTotal = Cut_Zero(Get_from_Wei(GasTotBN2Back.toString(), 18));
-		//LargeData = LargeData + "<br/><br/>Gas price:<span class='mCr'> " + Gas_Price + " Gwei</span>\
-		//<br/><br/>Total gas cost (x21000): <span class='mCr'>" + TrueGasTotal + ' ' + Worker2[0] + "</span>";
 
 		LargeData = LargeData + "<br/><br/>Gas price: <span class='mCr'>" + Gas_Price + " Gwei</span><br/><br/>" 
 		LargeData = LargeData +	"Total gas cost (x21000): <span class='mCr'>" + TrueGasTotal + ' ' + Worker2[0] + "</span>";
@@ -398,13 +394,13 @@
 			}
 			LargeData = LargeData + TmpStr;
 		}
-		BigOne = BigOne + Gas_Price
+		BigOne = BigOne + Gas_Price;
 
 		// if Alert
 		if (NeedConfirm){
 			checklist = checklist + "Forced to continue, please select &#39;OK&#39;, else &#39;Cancel&#39;.";
 
-			document.getElementById('DPaper2').style.display="";
+			document.getElementById('DPaper2').style.display="block";
 			document.getElementById('ConTit').innerHTML="&#9888; Confirm"
 			document.getElementById('ConMsg').innerHTML=checklist;
 
@@ -429,7 +425,7 @@
 
 		LargeData = LargeData + "<br/><br/>Nonce: <span class='mCr'>" + The_Nonce + "</span>";
 		LargeData = LargeData + "<br/><br/>If you confirm everything is correct, press &#39;OK&#39;, else &#39;Cancel&#39;.";
-		document.getElementById('DPaper2').style.display="";
+		document.getElementById('DPaper2').style.display="block";
 		document.getElementById('ConTit').innerHTML="&#9888; Final check"
 		document.getElementById('ConMsg').innerHTML=LargeData;
 
@@ -451,7 +447,7 @@
 				}
 			}
 
-		document.getElementById('ShowQr').style.display='';
+		document.getElementById('ShowQr').style.display='block';
 		document.getElementById('QrBlock').innerHTML = '';
 		BigOne = btoa(encodeURIComponent(BigOne)); //base64 looks good :P
 
@@ -502,7 +498,7 @@
 			document.getElementById('TH').innerHTML = '';
 
 			if (document.getElementById('SIGTR').value == '') {
-				document.getElementById('DarkPaper').style.display="";
+				document.getElementById('DarkPaper').style.display="block";
 				document.getElementById('ErrMsg').innerHTML = 'Signed transaction data is empty.';
 				return;
 			}
@@ -535,7 +531,7 @@
 				document.getElementById('Copy2clipTX').removeAttribute("disabled");
 			
 			} catch (exception) {
-				document.getElementById('DarkPaper').style.display="";
+				document.getElementById('DarkPaper').style.display="block";
 				document.getElementById('ErrMsg').innerHTML = exception;
 				document.getElementById('SIBR').innerHTML = exception + "<br /><br />Please verify the content,\
 					<br />and the selected cryptocurrency / RPC server is correct.";
@@ -611,15 +607,60 @@
 
 		if (SwitchMode == 0){
 			document.getElementById('main').style.display='none';
-			document.getElementById('main2').style.display='';
+			document.getElementById('main2').style.display='block';
 			document.getElementById('switchModeStr').innerHTML="Wallet assistant mode &nbsp;&nbsp;";
 			SwitchMode = 1;
 		} else {
 			document.getElementById('main2').style.display='none';
-			document.getElementById('main').style.display='';
-			document.getElementById('switchModeStr').innerHTML="RLP sign braodcast tool mode &nbsp;&nbsp;";
+			document.getElementById('main').style.display='block';
+			document.getElementById('switchModeStr').innerHTML="RLP sign broadcast tool mode &nbsp;&nbsp;";
 			SwitchMode = 0;
 		}
+	}
+
+	async function FillAll() {
+
+		var BALA = document.getElementById('BALA').value;
+
+		if(!BALA || BALA == '') {
+			document.getElementById('DarkPaper').style.display="block";
+			document.getElementById('ErrMsg').innerHTML = 'Please retrieve balance first.';
+			return;
+		}
+
+		// Process Gas price and total gas
+		var Gas_Price = document.getElementById('G_PRIC').value;
+		var GasBN2Back;
+		if (Gas_Price > 0){
+			GasBN2Back = new BN(Gas_Price.toString().replace(".", ""));
+			GasBN2Back = GasBN2Back.mul(GweitoWei);
+			GasBN2Back = GasBN2Back.div(new BN(GetMulWhat(Gas_Price)));
+			TrueSendGas = GasBN2Back.toString();
+		} else {
+			document.getElementById('DarkPaper').style.display="block";
+			document.getElementById('ErrMsg').innerHTML = 'The Gas price must be > 0 , please correct it.';
+			return;
+		}
+		var TrueGasTotal;
+		var GasTotBN2Back = GasBN2Back.mul(new BN('21000'));
+		TrueGasTotal = Cut_Zero(Get_from_Wei(GasTotBN2Back.toString(), 18));
+
+		// Check balance enough if balance exist 
+		var Sender_BalanceBN;
+		var Sender_Balance;
+		var TmpStr;
+		Sender_Balance = document.getElementById('TrueBALA').value;
+		Sender_BalanceBN = new BN(Sender_Balance.toString());
+		Sender_BalanceBN = Sender_BalanceBN.sub(GasTotBN2Back);
+
+		if (Sender_BalanceBN.isNeg()) {
+			document.getElementById('DarkPaper').style.display="block";
+			document.getElementById('ErrMsg').innerHTML = 'Total gas > balance. This operation is invalid.';
+			return;
+		}
+
+		document.getElementById('S_ETH').value =  Cut_Zero(Get_from_Wei(Sender_BalanceBN.toString(), 18));
+
 	}
 
 	</script>
@@ -659,6 +700,7 @@
   		left:0;
   		width:100%;
 		height:100%;
+		display:none;
 	}
 	.warning{
 		padding: 20px;
@@ -730,7 +772,7 @@
 		<br />
 		<div id="switchModeDIV" class="good2" style="text-align: center;">
 			<br/> 
-			<span id="switchModeStr">RLP sign braodcast tool mode &nbsp;&nbsp;</span>&#10140;&nbsp;&nbsp;
+			<span id="switchModeStr">RLP sign broadcast tool mode &nbsp;&nbsp;</span>&#10140;&nbsp;&nbsp;
 			<input type="button" onclick="ModeSwitch()" id="ModeSwitchBtn" value="&nbsp;Switch&nbsp;" />
 		</div>
 		<div id="switchModeDIV2" style="height: 11px;"></div>
@@ -775,15 +817,15 @@
 			Receiver&#39;s address ( Case match is better )<br />
 			<input id="R_ADDR" type="text" class="InputTxt"/><br /><br />
 			
-			How much cryptocurrency to send<br />
-			<input id="S_ETH" type="number" min="0" value="0" step="any" class="InputTxt"/><br /><br />
-			
 			Sender&#39;s nonce<br />
 			<input id="S_NONC" type="number" min="0" value="0" step="any" class="InputTxt"/><br /><br />
 			
 			Gas price (in Gwei)<br />
 			<input id="G_PRIC" type="number" min="0" value="0" step="any" class="InputTxt"/><br /><br />
 
+			How much cryptocurrency to send <a href="javascript:void(0);" onclick="FillAll();">&#10140; Fill all available balance</a><br />
+			<input id="S_ETH" type="number" min="0" value="0" step="any" class="InputTxt"/><br /><br />
+			
 			<div id="QrSQU" class="cool4">
 				<div id="QrFix" style="text-align:center;">
 					<span class="TitStr">QRcode</span> &nbsp; <input type="button" onclick="GoMakeQR()" id="GoMakeQR" class="btn" value="&nbsp;Make&nbsp;" />

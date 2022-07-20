@@ -1,7 +1,7 @@
 <!--
  * Overdoing ETH Warm Wallet
  * It's an ETH warm wallet developed by overdoingism Lab.
- * ver 0.971
+ * ver 0.98
  * LGPL v3 License
  * The author does not have any warranty or responsibility.
  * 
@@ -96,10 +96,12 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 //# sourceMappingURL=web3.min.js.map
 }
 
-
 	var web3;
 	var assistant;
 	var ConfirmChoice;
+	var BN = Web3.utils.BN;
+	const ETHtoWei = new BN('1000000000000000000');
+	const GweitoWei = new BN('1000000000');
 	const timeout = async ms => new Promise(res => setTimeout(res, ms));
 
 	window.addEventListener("load", function(){
@@ -107,7 +109,7 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 		web3 = new Web3(Web3.currentProvider);
 		document.getElementById('web3v').innerHTML = web3.version;
 		assistant = 'https://overdoignism.github.io/Overdoing-ETH-Warm-Wallet/EWWA.html?';
-		document.getElementById('ver').innerHTML = '0.971';
+		document.getElementById('ver').innerHTML = '0.98';
 		SetOption();
 	});
 
@@ -332,9 +334,6 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 		var Worker = document.getElementById('CC_TYPE').value;
 		Worker2 = Worker.split(',');
 		web3 = new Web3(Worker2[2]);
-		var BN = web3.utils.BN;
-		const ETHtoWei = new BN('1000000000000000000');
-		const GweitoWei = new BN('1000000000');
 		
 		var TheSender;
 		var Private_Key;
@@ -627,6 +626,7 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 			return TmpWorker01;
 		}
 	}
+
 	function GetMulWhat(TestTarget) {
 		var TestArray = TestTarget.toString().split(".");
 
@@ -677,6 +677,49 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 			document.getElementById('ConMsg2').innerHTML="The private key is mapped to address:<br /><br />" + TheSender.address +"<br />\
 			<br />If you have confirmed, press &#39;OK&#39;, else &#39;Cancel&#39;.";
 		}
+	}
+
+	async function FillAll() {
+
+		var BALA = document.getElementById('BALA').value;
+
+		if(!BALA || BALA == '') {
+			document.getElementById('DarkPaper').style.display="block";
+			document.getElementById('ErrMsg').innerHTML = 'Please retrieve balance first. (Need internet connected)';
+			return;
+		}
+
+		// Process Gas price and total gas
+		var Gas_Price = document.getElementById('G_PRIC').value;
+		var GasBN2Back;
+		if (Gas_Price > 0){
+			GasBN2Back = new BN(Gas_Price.toString().replace(".", ""));
+			GasBN2Back = GasBN2Back.mul(GweitoWei);
+			GasBN2Back = GasBN2Back.div(new BN(GetMulWhat(Gas_Price)));
+			TrueSendGas = GasBN2Back.toString();
+		} else {
+			document.getElementById('DarkPaper').style.display="block";
+			document.getElementById('ErrMsg').innerHTML = 'The Gas price must be > 0 , please correct it.';
+			return;
+		}
+		var TrueGasTotal;
+		var GasTotBN2Back = GasBN2Back.mul(new BN('21000'));
+		TrueGasTotal = Cut_Zero(Get_from_Wei(GasTotBN2Back.toString(), 18));
+
+		// Check balance enough if balance exist 
+		var Sender_BalanceBN;
+		var Sender_Balance;
+		var TmpStr;
+		Sender_Balance = document.getElementById('TrueBALA').value;
+		Sender_BalanceBN = new BN(Sender_Balance.toString());
+		Sender_BalanceBN = Sender_BalanceBN.sub(GasTotBN2Back);
+
+		if (Sender_BalanceBN.isNeg()) {
+			document.getElementById('DarkPaper').style.display="block";
+			document.getElementById('ErrMsg').innerHTML = 'Total gas > balance. This operation is invalid.';
+			return;
+		}
+		document.getElementById('S_ETH').value =  Cut_Zero(Get_from_Wei(Sender_BalanceBN.toString(), 18));
 	}
 
 	</script>
@@ -840,7 +883,7 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 				<div style="text-align: center;">
 					<span class="TitStr">Information</span> &nbsp; 
 					<input type="button" onclick="GetInfo()" class="btn" value="&nbsp;Retrieve&nbsp;" id="GetInfo">
-					&nbsp;&nbsp;( Need internet connected )
+					&nbsp;&nbsp;<span style="color: #900000; font-size: 18px;">&#9888; Need internet connected &#9888;</span>
 				</div>
 				<div id="Info02" style="text-align: left;">
 					<br />
@@ -868,15 +911,15 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 			Receiver&#39;s address ( Case match is better )<br />
 			<input id="R_ADDR" type="text" class="InputTxt"/><br /><br />
 			
-			How much cryptocurrency to send<br />
-			<input id="S_ETH" type="number" min="0" value="0" step="any" class="InputTxt"/><br /><br />
-			
 			Sender&#39;s nonce<br />
 			<input id="S_NONC" type="number" min="0" value="0" step="any" class="InputTxt"/><br /><br />
 			
 			Gas price (in Gwei)<br />
 			<input id="G_PRIC" type="number" min="0" value="0" step="any" class="InputTxt"/><br /><br />
 			
+			How much cryptocurrency to send <a href="javascript:void(0);" onclick="FillAll();">&#10140; Fill all available balance</a><br />
+			<input id="S_ETH" type="number" min="0" value="0" step="any" class="InputTxt"/><br /><br />
+
 			<div id="TxSigned1" class="cool2">
 				<div style="text-align: center;">
 					<span class="TitStr">Signed transaction</span> &nbsp; 
@@ -920,7 +963,7 @@ a=function(){return function(e){var t={};function r(n){if(t[n])return t[n].expor
 				<div style="text-align: center;">
 					<span class="TitStr">Broadcast</span> &nbsp; 
 					<input type="button" onclick="GoBroadcast()" id="DoItbtn" class="btn" value="&nbsp;Do it&nbsp;" title="Internet connection needed. Make signed transaction first." disabled="disabled" />
-					&nbsp;&nbsp;( Need internet connected )
+					&nbsp;&nbsp;<span style="color: #900000; font-size: 18px;">&#9888; Need internet connected &#9888;</span>
 				</div>
 				<div id="BroadcastDiv2">
 					<br />Broadcast result<br />
